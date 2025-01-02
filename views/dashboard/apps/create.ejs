@@ -1,0 +1,94 @@
+<%- contentFor('body') %>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="page-title">Create New Application</h1>
+                <a href="/dashboard/apps" class="btn btn-outline-primary">
+                    <i class="fas fa-arrow-left"></i> Back to Apps
+                </a>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <form action="/dashboard/apps/create" method="POST" class="needs-validation" novalidate>
+                        <!-- App Name -->
+                        <div class="mb-3">
+                            <label for="appName" class="form-label">Application Name *</label>
+                            <input type="text" class="form-control" id="appName" name="appName" required>
+                            <div class="invalid-feedback">Please provide an application name.</div>
+                        </div>
+
+                        <!-- Logo URL -->
+                        <div class="mb-3">
+                            <label for="logoUrl" class="form-label">Logo URL</label>
+                            <input type="url" class="form-control" id="logoUrl" name="logoUrl">
+                            <div class="form-text">Optional: URL to your application's logo</div>
+                        </div>
+
+                        <!-- Payment Modes -->
+                        <div class="mb-3">
+                            <label class="form-label">Payment Modes *</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="paymentModes[]" value="card" id="modeCard" checked>
+                                <label class="form-check-label" for="modeCard">Card</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="paymentModes[]" value="wallet" id="modeWallet">
+                                <label class="form-check-label" for="modeWallet">Wallet</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="paymentModes[]" value="crypto" id="modeCrypto">
+                                <label class="form-check-label" for="modeCrypto">Crypto</label>
+                            </div>
+                        </div>
+
+                        <!-- Callback Settings -->
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="shouldSendClientCallback" name="shouldSendClientCallback" value="true">
+                                <label class="form-check-label" for="shouldSendClientCallback">
+                                    Enable Payment Callbacks
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Callback URL (conditionally visible) -->
+                        <div class="mb-3 callback-url-container d-none">
+                            <label for="appCallbackUrl" class="form-label">Callback URL *</label>
+                            <input type="url" class="form-control" id="appCallbackUrl" name="appCallbackUrl">
+                            <div class="form-text">URL where payment notifications will be sent</div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Create Application</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle callback URL visibility
+    const callbackCheckbox = document.getElementById('shouldSendClientCallback');
+    const callbackUrlContainer = document.querySelector('.callback-url-container');
+    const callbackUrlInput = document.getElementById('appCallbackUrl');
+
+    callbackCheckbox.addEventListener('change', function() {
+        callbackUrlContainer.classList.toggle('d-none', !this.checked);
+        callbackUrlInput.required = this.checked;
+    });
+
+    // Form validation
+    const form = document.querySelector('form');
+    form.addEventListener('submit', function(event) {
+        if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+    });
+});
+</script>

@@ -5,13 +5,22 @@ const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const session = require('express-session');
 const flash = require('connect-flash');
+const expressLayouts = require('express-ejs-layouts');
 
 const indexRouter = require("./routes/index");
 const app = express();
 
-app.use(logger("dev"));
+// View engine setup
 app.set("views", path.join(__dirname, "./views"));
 app.set("view engine", "ejs");
+
+// Express layouts middleware
+app.use(expressLayouts);
+app.set('layout', 'layouts/default'); // Set default layout
+app.set("layout extractScripts", true);
+app.set("layout extractStyles", true);
+
+app.use(logger("dev"));
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -28,8 +37,16 @@ app.use(session({
 // Flash messages middleware
 app.use(flash());
 
+// Make user available to all templates
+app.use((req, res, next) => {
+    res.locals.user = req.session.user;
+    res.locals.messages = req.flash();
+    next();
+});
+
 app.use("/", indexRouter);
 
+// Error handlers
 app.use((req, res, next) => {
     const err = new Error('Not Found');
     err.status = 404;

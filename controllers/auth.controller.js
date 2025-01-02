@@ -1,10 +1,17 @@
-const db = require("../models");
-const bcrypt = require("bcryptjs");
-const uuid = require('uuid');
+const db = require('../models');
+const bcrypt = require('bcryptjs');
+const Joi = require('joi');
+const { validateUserInput } = require('../utils/validation');
 
 const controller = {
     loginPost: async (req, res) => {
         try {
+            const { error } = validateUserInput.login(req.body);
+            if (error) {
+                req.flash('error', error.details[0].message);
+                return res.redirect('/login');
+            }
+
             const { email, password } = req.body;
             const user = await db.User.findOne({ where: { email } });
 
@@ -15,10 +22,15 @@ const controller = {
 
             req.session.user = {
                 id: user.id,
+                uuid: user.uuid,
                 email: user.email,
                 fullName: user.fullName
             };
             
+            if (req.body.remember) {
+                req.session.cookie.maxAge = 30 * 24 * 60 * 60 * 1000; // 30 days
+            }
+
             res.redirect('/dashboard');
         } catch (error) {
             console.error('Login error:', error);
@@ -27,27 +39,25 @@ const controller = {
         }
     },
 
-    createUserPost: async (req, res) => {
+    createUser: async (req, res) => {
         try {
-            const { fullName, companyName, email, phoneNumber, password } = req.body;
-            
-            // Check if user exists
+            const { error } = validateUserInput.register(req.body);
+            if (error) {
+                req.flash('error', error.details[0].message);
+                return res.redirect('/register');
+            }
+
+            const { email } = req.body;
             const existingUser = await db.User.findOne({ where: { email } });
+            
             if (existingUser) {
                 req.flash('error', 'Email already registered');
                 return res.redirect('/register');
             }
 
-            // Hash password
-            const hashedPassword = await bcrypt.hash(password, 10);
-
-            // Create user
+            const hashedPassword = await bcrypt.hash(req.body.password, 10);
             await db.User.create({
-                uuid: uuid.v4(),
-                fullName,
-                companyName,
-                email,
-                phoneNumber,
+                ...req.body,
                 password: hashedPassword
             });
 
@@ -61,8 +71,9 @@ const controller = {
     },
 
     logout: (req, res) => {
-        req.session.destroy();
-        res.redirect('/login');
+        req.session.destroy(() => {
+            res.redirect('/login');
+        });
     }
 };
 

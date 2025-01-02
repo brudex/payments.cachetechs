@@ -1,49 +1,17 @@
 const express = require("express");
 const router = express.Router();
+const pageRoutes = require('./page.routes');
+const authRoutes = require('./auth.routes');
+const dashboardRoutes = require('./dashboard.routes');
 
-// Public Routes
-router.get("/", (req, res) => {
-    res.render("index");
-});
-
-router.get("/login", (req, res) => {
-    res.render("login", { messages: req.flash() });
-});
-
-router.get("/register", (req, res) => {
-    res.render("register", { messages: req.flash() });
-});
-
-
-// Dashboard Routes
-router.get("/dashboard", (req, res) => {
-    const mockUser = {
-        fullName: 'Demo User'
-    };
-    
-    res.render("dashboard/index", {
-        user: mockUser,
-        path: '/dashboard',
-        layout: 'layouts/dashboard'
-    });
-});
-
-// Authentication Routes
-router.post("/auth/login", (req, res) => {
-    res.redirect('/dashboard');
-});
-
-router.post("/auth/register", (req, res) => {
-    res.redirect('/login');
-});
-
-router.get("/auth/logout", (req, res) => {
-    res.redirect('/login');
-});
+// Mount sub-routers
+router.use('/', pageRoutes);
+router.use('/auth', authRoutes);
+router.use('/dashboard', dashboardRoutes);
 
 // 404 handler - should be last
-router.get("404", (req, res) => {
-    res.render("404");
+router.get("*", (req, res) => {
+    res.render("404", { layout: false });
 });
 
 module.exports = router;

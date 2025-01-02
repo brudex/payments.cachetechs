@@ -44,6 +44,10 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: false,
                 defaultValue: false,
             },
+           appCallbackUrl:{
+                type: DataTypes.STRING,
+                allowNull: true,
+            },
             isActive: {
                 type: DataTypes.BOOLEAN,
                 allowNull: false,

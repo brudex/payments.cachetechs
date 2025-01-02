@@ -1,0 +1,107 @@
+<%- contentFor('body') %>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="page-title">My Applications</h1>
+                <a href="/dashboard/apps/create" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Create New App
+                </a>
+            </div>
+
+            <% if (messages.success) { %>
+                <div class="alert alert-success" role="alert">
+                    <%= messages.success %>
+                </div>
+            <% } %>
+
+            <% if (messages.error) { %>
+                <div class="alert alert-danger" role="alert">
+                    <%= messages.error %>
+                </div>
+            <% } %>
+
+            <div class="row">
+                <% if (apps && apps.length > 0) { %>
+                    <% apps.forEach(function(app) { %>
+                        <div class="col-md-6 col-lg-4 mb-4">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <% if (app.logoUrl) { %>
+                                            <img src="<%= app.logoUrl %>" alt="<%= app.appName %>" class="me-3" style="width: 40px; height: 40px; object-fit: contain;">
+                                        <% } else { %>
+                                            <div class="me-3">
+                                                <i class="fas fa-cube fa-2x text-primary"></i>
+                                            </div>
+                                        <% } %>
+                                        <h5 class="card-title mb-0"><%= app.appName %></h5>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <small class="text-muted">Payment Modes:</small>
+                                        <div class="mt-1">
+                                            <% app.paymentModes.forEach(function(mode) { %>
+                                                <span class="badge bg-primary me-1"><%= mode %></span>
+                                            <% }); %>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <small class="text-muted">App ID:</small>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control form-control-sm" value="<%= app.appId %>" readonly>
+                                            <button class="btn btn-outline-secondary btn-sm copy-btn" type="button" data-clipboard-text="<%= app.appId %>">
+                                                <i class="fas fa-copy"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <small class="text-muted">API Key:</small>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control form-control-sm" value="<%= app.apiKey %>" readonly>
+                                            <button class="btn btn-outline-secondary btn-sm copy-btn" type="button" data-clipboard-text="<%= app.apiKey %>">
+                                                <i class="fas fa-copy"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div class="text-end">
+                                        <button class="btn btn-sm btn-outline-primary me-2">
+                                            <i class="fas fa-cog"></i> Settings
+                                        </button>
+                                        <% if (app.isActive) { %>
+                                            <span class="badge bg-success">Active</span>
+                                        <% } else { %>
+                                            <span class="badge bg-danger">Inactive</span>
+                                        <% } %>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <% }); %>
+                <% } else { %>
+                    <div class="col-12">
+                        <div class="text-center py-5">
+                            <i class="fas fa-cube fa-3x text-muted mb-3"></i>
+                            <h4>No Applications Yet</h4>
+                            <p class="text-muted">Create your first application to get started</p>
+                            <a href="/dashboard/apps/create" class="btn btn-primary">
+                                <i class="fas fa-plus"></i> Create New App
+                            </a>
+                        </div>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.8/clipboard.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    new ClipboardJS('.copy-btn');
+});
+</script>

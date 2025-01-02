@@ -1,5 +1,3 @@
-<%- include('partials/header') %>
-
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-6">
@@ -13,17 +11,7 @@
                         </div>
                     <% } %>
 
-                    <form 
-                        hx-post="/register" 
-                        hx-swap="outerHTML"
-                        x-data="{
-                            password: '',
-                            confirmPassword: '',
-                            validatePassword() {
-                                return this.password === this.confirmPassword;
-                            }
-                        }"
-                    >
+                    <form action="/auth/register" method="POST">
                         <div class="mb-3">
                             <label for="fullName" class="form-label">Full Name</label>
                             <input type="text" class="form-control" id="fullName" name="fullName" required>
@@ -47,8 +35,8 @@
                                 class="form-control" 
                                 id="password" 
                                 name="password" 
-                                x-model="password"
                                 required
+                                minlength="6"
                             >
                         </div>
                         <div class="mb-3">
@@ -57,32 +45,18 @@
                                 type="password" 
                                 class="form-control" 
                                 id="confirmPassword"
-                                x-model="confirmPassword"
+                                name="confirmPassword"
                                 required
                             >
-                            <div 
-                                class="invalid-feedback"
-                                x-show="!validatePassword() && confirmPassword.length > 0"
-                            >
-                                Passwords do not match
-                            </div>
                         </div>
-                        <button 
-                            type="submit" 
-                            class="btn btn-primary-custom w-100"
-                            x-bind:disabled="!validatePassword()"
-                        >
-                            Register
-                        </button>
+                        <button type="submit" class="btn btn-primary w-100">Register</button>
                     </form>
                     
                     <div class="text-center mt-3">
-                        <p>Already have an account? <a href="/login" class="text-primary-custom">Sign In</a></p>
+                        <p>Already have an account? <a href="/login" class="text-decoration-none">Sign In</a></p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-<%- include('partials/footer') %>
