@@ -1,0 +1,19 @@
+<div class="topbar">
+    <button class="sidebar-toggle">
+        <i class="fas fa-bars"></i>
+    </button>
+    
+    <div class="topbar-right">
+        <div class="dropdown">
+            <button class="btn dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown">
+                <i class="fas fa-user-circle"></i>
+                <%= user.fullName %>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="/dashboard/profile">Profile</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="/auth/logout">Logout</a></li>
+            </ul>
+        </div>
+    </div>
+</div>

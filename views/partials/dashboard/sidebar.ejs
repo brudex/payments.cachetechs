@@ -1,0 +1,35 @@
+<div class="sidebar">
+    <div class="sidebar-header">
+        <img src="/images/logo.png" alt="Logo" class="logo">
+        <h5>Cache Payments</h5>
+    </div>
+    
+    <nav class="sidebar-nav">
+        <ul>
+            <li class="<%= path === '/dashboard' ? 'active' : '' %>">
+                <a href="/dashboard">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li class="<%= path === '/dashboard/transactions' ? 'active' : '' %>">
+                <a href="/dashboard/transactions">
+                    <i class="fas fa-exchange-alt"></i>
+                    <span>Transactions</span>
+                </a>
+            </li>
+            <li class="<%= path === '/dashboard/apps' ? 'active' : '' %>">
+                <a href="/dashboard/apps">
+                    <i class="fas fa-cube"></i>
+                    <span>Applications</span>
+                </a>
+            </li>
+            <li class="<%= path === '/dashboard/settings' ? 'active' : '' %>">
+                <a href="/dashboard/settings">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>

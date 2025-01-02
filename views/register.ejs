@@ -1,0 +1,88 @@
+<%- include('partials/header') %>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-body p-5">
+                    <h2 class="text-center mb-4">Create Account</h2>
+                    
+                    <% if (messages.error) { %>
+                        <div class="alert alert-danger" role="alert">
+                            <%= messages.error %>
+                        </div>
+                    <% } %>
+
+                    <form 
+                        hx-post="/register" 
+                        hx-swap="outerHTML"
+                        x-data="{
+                            password: '',
+                            confirmPassword: '',
+                            validatePassword() {
+                                return this.password === this.confirmPassword;
+                            }
+                        }"
+                    >
+                        <div class="mb-3">
+                            <label for="fullName" class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="fullName" name="fullName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="companyName" class="form-label">Company Name</label>
+                            <input type="text" class="form-control" id="companyName" name="companyName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="phoneNumber" class="form-label">Phone Number</label>
+                            <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber">
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input 
+                                type="password" 
+                                class="form-control" 
+                                id="password" 
+                                name="password" 
+                                x-model="password"
+                                required
+                            >
+                        </div>
+                        <div class="mb-3">
+                            <label for="confirmPassword" class="form-label">Confirm Password</label>
+                            <input 
+                                type="password" 
+                                class="form-control" 
+                                id="confirmPassword"
+                                x-model="confirmPassword"
+                                required
+                            >
+                            <div 
+                                class="invalid-feedback"
+                                x-show="!validatePassword() && confirmPassword.length > 0"
+                            >
+                                Passwords do not match
+                            </div>
+                        </div>
+                        <button 
+                            type="submit" 
+                            class="btn btn-primary-custom w-100"
+                            x-bind:disabled="!validatePassword()"
+                        >
+                            Register
+                        </button>
+                    </form>
+                    
+                    <div class="text-center mt-3">
+                        <p>Already have an account? <a href="/login" class="text-primary-custom">Sign In</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('partials/footer') %>
