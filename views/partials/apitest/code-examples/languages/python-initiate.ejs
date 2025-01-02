@@ -1,0 +1,44 @@
+<div>
+    <div class="code-block">
+        <button class="copy-button" data-clipboard-target="#python-initiate-code">
+            <i class="fas fa-copy"></i>
+        </button>
+        <pre><code class="language-python" id="python-initiate-code">import requests
+import json
+import base64
+
+# API credentials
+app_id = '<%= app.appId %>'
+app_secret = '<%= app.appSecret %>'
+api_key = '<%= app.apiKey %>'
+
+# Create Basic Auth header
+credentials = f"{app_id}:{app_secret}"
+encoded_credentials = base64.b64encode(credentials.encode()).decode()
+
+# Headers
+headers = {
+    'Authorization': f'Basic {encoded_credentials}',
+    'x-api-key': api_key,
+    'Content-Type': 'application/json'
+}
+
+# Payment data
+payload = {
+    'amount': 100.00,
+    'currency': 'GHS',
+    'paymentMode': 'card',
+    'description': 'Test payment',
+    'customerEmail': 'customer@example.com',
+    'customerName': 'John Doe',
+    'orderId': 'ORDER123'
+}
+
+# Make request
+response = requests.post(
+    'https://checkout.cachetechs.com/api/initiatePaymentIntent',
+    headers=headers,
+    json=payload
+)</code></pre>
+    </div>
+</div>

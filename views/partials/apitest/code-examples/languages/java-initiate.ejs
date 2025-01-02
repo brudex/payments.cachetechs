@@ -1,0 +1,53 @@
+<div >
+    <div class="code-block">
+        <button class="copy-button" data-clipboard-target="#java-initiate-code">
+            <i class="fas fa-copy"></i>
+        </button>
+        <pre><code class="language-java" id="java-initiate-code">import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.URI;
+import java.util.Base64;
+
+public class PaymentExample {
+    public static void main(String[] args) {
+        String appId = "<%= app.appId %>";
+        String appSecret = "<%= app.appSecret %>";
+        String apiKey = "<%= app.apiKey %>";
+
+        // Create Basic Auth header
+        String credentials = appId + ":" + appSecret;
+        String encodedCredentials = Base64.getEncoder().encodeToString(credentials.getBytes());
+
+        // Payment payload
+        String payload = """
+            {
+                "amount": 100.00,
+                "currency": "GHS",
+                "paymentMode": "card",
+                "description": "Test payment",
+                "customerEmail": "customer@example.com",
+                "customerName": "John Doe",
+                "orderId": "ORDER123"
+            }
+        """;
+
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+            .uri(URI.create("https://checkout.cachetechs.com/api/initiatePaymentIntent"))
+            .header("Authorization", "Basic " + encodedCredentials)
+            .header("x-api-key", apiKey)
+            .header("Content-Type", "application/json")
+            .POST(HttpRequest.BodyPublishers.ofString(payload))
+            .build();
+
+        try {
+            HttpResponse<String> response = client.send(request, 
+                HttpResponse.BodyHandlers.ofString());
+            System.out.println(response.body());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }</code></pre>
+    </div>
+</div>

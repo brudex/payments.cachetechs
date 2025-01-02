@@ -1,39 +1,57 @@
 const fs = require("fs");
 const path = require("path");
-const { initializeDatabase } = require("../config/database");
+const Sequelize = require("sequelize");
+const config = require("../config/config");
 const db = {};
 
-const initializeModels = async () => {
-  try {
-    const sequelize = await initializeDatabase();
-    
-    // Load models
-    fs.readdirSync(__dirname)
-      .filter((file) => file.indexOf(".") !== 0 && file !== "index.js")
-      .forEach((file) => {
-        const model = require(path.join(__dirname, file))(sequelize, sequelize.Sequelize.DataTypes);
-        db[model.name] = model;
-      });
 
-    // Initialize associations
-    Object.keys(db).forEach((modelName) => {
-      if ("associate" in db[modelName]) {
-        db[modelName].associate(db);
-      }
+let  sequelize = new Sequelize(config.db, config.dbuser, config.dbpass, {
+    host: config.dbhost,
+    dialect: 'postgres',
+    logging: true,
+    pool: {
+        max: 5,
+        min: 0,
+        acquire: 30000,
+        idle: 10000
+    }
+});
+
+sequelize.authenticate().then(() => {
+    console.log("Connection has been established successfully.");
+    loadModels(sequelize, Sequelize);
+}).catch((err) => {
+    console.error("Unable to connect to the database:", err);
+    if (process.env.NODE_ENV === 'development') {
+        console.log('Falling back to SQLite in-memory database...');
+        sequelize = new Sequelize('sqlite::memory:', {
+            logging: true
+        });
+        console.log('SQLite connection established successfully.');
+        loadModels(sequelize, Sequelize);
+    }
+});
+
+function loadModels(sequelize, Sequelize) {
+  fs.readdirSync(__dirname)
+    .filter((file) => file.indexOf(".") !== 0 && file !== "index.js")
+    .forEach((file) => {
+      const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
+      db[model.name] = model;
     });
 
-    db.sequelize = sequelize;
-    db.Sequelize = sequelize.Sequelize;
+  Object.keys(db).forEach((modelName) => {
+    if ("associate" in db[modelName]) {
+      db[modelName].associate(db);
+    }
+  });
 
-    // Sync database
-    await sequelize.sync();
-    console.log('Database synced successfully');
-    
-    return db;
-  } catch (error) {
-    console.error('Failed to initialize database:', error);
-    throw error;
-  }
-};
+  db.sequelize = sequelize;
+  db.Sequelize = Sequelize;
+  return db;
+}
 
-module.exports = initializeModels();
+
+module.exports = db;
+
+

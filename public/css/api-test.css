@@ -1,0 +1,124 @@
+/* API Test Page Styles */
+
+/* Cards */
+.card {
+    border: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    margin-bottom: 1.5rem;
+}
+
+.card-header {
+    background-color: #fff;
+    border-bottom: 1px solid #e9ecef;
+    padding: 1rem 1.25rem;
+}
+
+.card-header .badge {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.85rem;
+    padding: 0.5rem 0.75rem;
+}
+
+/* Code blocks */
+.code-block {
+    position: relative;
+    background: #282c34;
+    border-radius: 6px;
+    margin: 1rem 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.code-block pre {
+    margin: 0;
+    padding: 1.5rem;
+    overflow-x: auto;
+    background: transparent;
+}
+
+.code-block code {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.9rem;
+    background: transparent;
+    padding: 0;
+}
+
+/* Copy buttons */
+.copy-button, .copy-btn {
+    padding: 0.375rem 0.75rem;
+    background: #3e4451;
+    border: 1px solid #528bff;
+    border-radius: 4px;
+    color: #abb2bf;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.copy-button {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    z-index: 10;
+}
+
+.copy-button:hover, .copy-btn:hover {
+    background: #4b5363;
+    border-color: #61afef;
+    color: #fff;
+}
+
+.copy-button.copied, .copy-btn.copied {
+    background: #98c379;
+    border-color: #98c379;
+    color: #fff;
+}
+
+/* Language tabs */
+.nav-tabs {
+    border-bottom: 1px solid #e9ecef;
+    margin-bottom: 1rem;
+}
+
+.nav-tabs .nav-link {
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: #6c757d;
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+
+.nav-tabs .nav-link:hover {
+    border-color: transparent;
+    color: #0d6efd;
+}
+
+.nav-tabs .nav-link.active {
+    color: #0d6efd;
+    border-bottom: 2px solid #0d6efd;
+    background: none;
+}
+
+/* Tab content */
+.tab-content {
+    position: relative;
+}
+
+.tab-pane {
+    opacity: 0;
+    transition: opacity 0.15s ease-in-out;
+}
+
+.tab-pane.show {
+    opacity: 1;
+}
+
+/* Credentials section */
+.input-group-text {
+    background: none;
+    border-left: none;
+}
+
+.form-control[readonly] {
+    background-color: #f8f9fa;
+}

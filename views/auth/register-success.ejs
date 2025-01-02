@@ -1,0 +1,24 @@
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-body p-5 text-center">
+                    <div class="mb-4">
+                        <i class="fas fa-check-circle text-success fa-4x"></i>
+                    </div>
+                    <h2 class="mb-4">Registration Successful!</h2>
+                    <p class="mb-4">Your account has been created successfully. You will be redirected to the login page in a few seconds...</p>
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    setTimeout(() => {
+        window.location.href = '/login';
+    }, 5000);
+</script>

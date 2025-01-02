@@ -1,0 +1,21 @@
+<div class="mb-3">
+    <label class="form-label">Payment Modes *</label>
+    <div class="payment-modes">
+        <% Object.entries(paymentModes).forEach(([key, label]) => { %>
+            <div class="form-check">
+                <input 
+                    class="form-check-input" 
+                    type="checkbox" 
+                    id="mode-<%= key %>"
+                    value="<%= key %>"
+                    name="paymentModes[]"
+                    <% if (defaultModes.includes(key)) { %>checked<% } %>
+                >
+                <label class="form-check-label" for="mode-<%= key %>">
+                    <%= label %>
+                </label>
+            </div>
+        <% }); %>
+    </div>
+    <div class="form-text">Select at least one payment mode</div>
+</div>

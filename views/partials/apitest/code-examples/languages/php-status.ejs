@@ -1,0 +1,26 @@
+<div>
+llll
+    <div class="code-block">
+        <button class="copy-button" data-clipboard-target="#php-status-code">
+            <i class="fas fa-copy"></i>
+        </button>
+        <pre><code class="language-php" id="php-status-code"><?php
+$appId = '<%= app.appId %>';
+$appSecret = '<%= app.appSecret %>';
+$apiKey = '<%= app.apiKey %>';
+
+$credentials = base64_encode("$appId:$appSecret");
+
+$headers = [
+    'Authorization: Basic ' . $credentials,
+    'x-api-key: ' . $apiKey
+];
+
+$ch = curl_init('https://checkout.cachetechs.com/api/transaction/status/ORDER123');
+curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+$response = curl_exec($ch);
+curl_close($ch);</code></pre>
+    </div>
+</div>

@@ -1,0 +1,10 @@
+<div>
+    <div class="code-block">
+        <button class="copy-button" data-clipboard-target="#curl-status-code">
+            <i class="fas fa-copy"></i>
+        </button>
+        <pre><code class="language-bash" id="curl-status-code">curl https://checkout.cachetechs.com/api/transaction/status/ORDER123 \
+    -H "Authorization: Basic <%= Buffer.from(app.appId + ':' + app.appSecret).toString('base64') %>" \
+    -H "x-api-key: <%= app.apiKey %>"</code></pre>
+    </div>
+</div>

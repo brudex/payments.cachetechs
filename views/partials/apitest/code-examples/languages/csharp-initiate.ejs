@@ -1,0 +1,56 @@
+<div>
+    <div class="code-block">
+        <button class="copy-button" data-clipboard-target="#csharp-initiate-code">
+            <i class="fas fa-copy"></i>
+        </button>
+        <pre><code class="language-csharp" id="csharp-initiate-code">using System;
+using System.Net.Http;
+using System.Text;
+using System.Text.Json;
+using System.Threading.Tasks;
+
+class Program
+{
+    static async Task Main()
+    {
+        var appId = "<%= app.appId %>";
+        var appSecret = "<%= app.appSecret %>";
+        var apiKey = "<%= app.apiKey %>";
+
+        // Create Basic Auth header
+        var credentials = Convert.ToBase64String(
+            Encoding.ASCII.GetBytes($"{appId}:{appSecret}")
+        );
+
+        var payload = new
+        {
+            amount = 100.00,
+            currency = "GHS",
+            paymentMode = "card",
+            description = "Test payment",
+            customerEmail = "customer@example.com",
+            customerName = "John Doe",
+            orderId = "ORDER123"
+        };
+
+        using var client = new HttpClient();
+        client.DefaultRequestHeaders.Add("Authorization", $"Basic {credentials}");
+        client.DefaultRequestHeaders.Add("x-api-key", apiKey);
+
+        var content = new StringContent(
+            JsonSerializer.Serialize(payload),
+            Encoding.UTF8,
+            "application/json"
+        );
+
+        var response = await client.PostAsync(
+            "https://checkout.cachetechs.com/api/initiatePaymentIntent",
+            content
+        );
+
+        var result = await response.Content.ReadAsStringAsync();
+        Console.WriteLine(result);
+    }
+}</code></pre>
+    </div>
+</div>

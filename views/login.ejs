@@ -5,9 +5,17 @@
                 <div class="card-body p-5">
                     <h2 class="text-center mb-4">Sign In</h2>
                     
+                    <% if (messages.success) { %>
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <%= messages.success %>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    <% } %>
+
                     <% if (messages.error) { %>
-                        <div class="alert alert-danger" role="alert">
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
                             <%= messages.error %>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     <% } %>
 

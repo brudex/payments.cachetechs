@@ -6,6 +6,7 @@ const logger = require("morgan");
 const session = require('express-session');
 const flash = require('connect-flash');
 const expressLayouts = require('express-ejs-layouts');
+const { MOCK_USER } = require('./middlewares/auth.middleware');
 
 const indexRouter = require("./routes/index");
 const app = express();
@@ -39,6 +40,12 @@ app.use(flash());
 
 // Make user available to all templates
 app.use((req, res, next) => {
+    // For development, always set mock user
+    if (process.env.NODE_ENV !== 'production') {
+        req.session = req.session || {};
+        req.session.user = MOCK_USER;
+    }
+    
     res.locals.user = req.session.user;
     res.locals.messages = req.flash();
     next();

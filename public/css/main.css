@@ -1,0 +1,36 @@
+/* Common styles shared across all pages */
+:root {
+  --primary-blue: #0052cc;
+  --secondary-blue: #0747a6;
+  --text-dark: #172b4d;
+  --text-light: #6b778c;
+  --white: #ffffff;
+  --gray-100: #f4f5f7;
+  --gray-200: #ebecf0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  color: var(--text-dark);
+  line-height: 1.5;
+  background-color: var(--white);
+}
+
+/* Common button styles */
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+  border: none;
+  padding: 0.5rem 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(0, 82, 204, 0.2);
+}
+
+/* Common form styles */
+.form-control:focus {
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 0.2rem rgba(0, 82, 204, 0.25);
+}

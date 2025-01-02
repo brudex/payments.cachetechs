@@ -1,5 +1,3 @@
-<%- contentFor('body') %>
-
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
@@ -10,58 +8,70 @@
                 </a>
             </div>
 
+            <% if (messages.error) { %>
+                <div class="alert alert-danger" role="alert">
+                    <%= messages.error %>
+                </div>
+            <% } %>
+
             <div class="card">
                 <div class="card-body">
-                    <form action="/dashboard/apps/create" method="POST" class="needs-validation" novalidate>
+                    <form action="/dashboard/apps/create" method="POST" id="createAppForm">
                         <!-- App Name -->
                         <div class="mb-3">
                             <label for="appName" class="form-label">Application Name *</label>
-                            <input type="text" class="form-control" id="appName" name="appName" required>
-                            <div class="invalid-feedback">Please provide an application name.</div>
-                        </div>
-
-                        <!-- Logo URL -->
-                        <div class="mb-3">
-                            <label for="logoUrl" class="form-label">Logo URL</label>
-                            <input type="url" class="form-control" id="logoUrl" name="logoUrl">
-                            <div class="form-text">Optional: URL to your application's logo</div>
+                            <input 
+                                type="text" 
+                                class="form-control" 
+                                id="appName" 
+                                name="appName" 
+                                required
+                                minlength="3"
+                                maxlength="100"
+                                hx-get="/dashboard/apps/validate-name"
+                                hx-trigger="change"
+                                hx-target="next .invalid-feedback"
+                            >
+                            <div class="invalid-feedback"></div>
                         </div>
 
                         <!-- Payment Modes -->
-                        <div class="mb-3">
-                            <label class="form-label">Payment Modes *</label>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="paymentModes[]" value="card" id="modeCard" checked>
-                                <label class="form-check-label" for="modeCard">Card</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="paymentModes[]" value="wallet" id="modeWallet">
-                                <label class="form-check-label" for="modeWallet">Wallet</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="paymentModes[]" value="crypto" id="modeCrypto">
-                                <label class="form-check-label" for="modeCrypto">Crypto</label>
-                            </div>
-                        </div>
+                        <%- include('_payment-modes', { paymentModes, defaultModes }) %>
 
                         <!-- Callback Settings -->
                         <div class="mb-3">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="shouldSendClientCallback" name="shouldSendClientCallback" value="true">
-                                <label class="form-check-label" for="shouldSendClientCallback">
+                                <input 
+                                    class="form-check-input" 
+                                    type="checkbox" 
+                                    id="shouldSendCallback"
+                                    name="shouldSendCallback"
+                                    value="true"
+                                >
+                                <label class="form-check-label" for="shouldSendCallback">
                                     Enable Payment Callbacks
                                 </label>
                             </div>
+                            
+                            <div class="mt-3" id="callbackUrlContainer" style="display: none;">
+                                <label for="callbackUrl" class="form-label">Callback URL *</label>
+                                <input 
+                                    type="url" 
+                                    class="form-control" 
+                                    id="callbackUrl" 
+                                    name="callbackUrl"
+                                    placeholder="https://your-domain.com/webhook"
+                                    pattern="https?://.+"
+                                >
+                                <div class="form-text">
+                                    URL that will receive payment notifications via POST requests. Must start with http:// or https://
+                                </div>
+                            </div>
                         </div>
 
-                        <!-- Callback URL (conditionally visible) -->
-                        <div class="mb-3 callback-url-container d-none">
-                            <label for="appCallbackUrl" class="form-label">Callback URL *</label>
-                            <input type="url" class="form-control" id="appCallbackUrl" name="appCallbackUrl">
-                            <div class="form-text">URL where payment notifications will be sent</div>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary">Create Application</button>
+                        <button type="submit" class="btn btn-primary">
+                            Create Application
+                        </button>
                     </form>
                 </div>
             </div>
@@ -69,26 +79,5 @@
     </div>
 </div>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Handle callback URL visibility
-    const callbackCheckbox = document.getElementById('shouldSendClientCallback');
-    const callbackUrlContainer = document.querySelector('.callback-url-container');
-    const callbackUrlInput = document.getElementById('appCallbackUrl');
-
-    callbackCheckbox.addEventListener('change', function() {
-        callbackUrlContainer.classList.toggle('d-none', !this.checked);
-        callbackUrlInput.required = this.checked;
-    });
-
-    // Form validation
-    const form = document.querySelector('form');
-    form.addEventListener('submit', function(event) {
-        if (!form.checkValidity()) {
-            event.preventDefault();
-            event.stopPropagation();
-        }
-        form.classList.add('was-validated');
-    });
-});
-</script>
+<!-- Include app form JS -->
+<script src="/js/app-form.js"></script>

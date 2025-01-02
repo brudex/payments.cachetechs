@@ -1,0 +1,57 @@
+<div class="card mb-4">
+    <div class="card-header">
+        <div class="d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">
+                <i class="fas fa-money-bill-wave me-2"></i>
+                1. Initiate Payment
+            </h5>
+            <span class="badge bg-primary">POST /initiatePaymentIntent</span>
+        </div>
+    </div>
+    <div class="card-body">
+        <p class="text-muted mb-4">Start a payment transaction by sending a POST request with the payment details.</p>
+        
+        <div class="code-examples">
+           <ul class="nav nav-tabs" role="tablist">
+              <li class="nav-item">
+                  <a class="nav-link active" data-bs-toggle="tab" href="#initiate-curl">cURL</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" data-bs-toggle="tab" href="#initiate-javascript">JavaScript</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" data-bs-toggle="tab" href="#initiate-python">Python</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" data-bs-toggle="tab" href="#initiate-php">PHP</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" data-bs-toggle="tab" href="#initiate-java">Java</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" data-bs-toggle="tab" href="#initiate-csharp">C#</a>
+              </li>
+          </ul>
+            <div class="tab-content mt-3">
+               <div class="tab-pane fade show active" id="initiate-curl">
+                    <%- include('./languages/curl-initiate', { app }) %>
+                </div>
+                <div class="tab-pane fade" id="initiate-javascript">
+                    <%- include('./languages/javascript-initiate', { app }) %>
+                </div>
+                <div class="tab-pane fade" id="initiate-python">
+                    <%- include('./languages/python-initiate', { app }) %>
+                </div>
+                <div class="tab-pane fade" id="initiate-php">
+                    <%- include('./languages/php-initiate', { app }) %>
+                </div>
+                <div class="tab-pane fade" id="initiate-java">
+                    <%- include('./languages/java-initiate', { app }) %>
+                </div>
+                <div class="tab-pane fade" id="initiate-csharp">
+                    <%- include('./languages/csharp-initiate', { app }) %>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

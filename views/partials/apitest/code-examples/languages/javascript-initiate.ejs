@@ -1,0 +1,24 @@
+<div>
+    <div class="code-block">
+        <button class="copy-button" data-clipboard-target="#js-initiate-code">
+            <i class="fas fa-copy"></i>
+        </button>
+        <pre><code class="language-javascript" id="js-initiate-code">const response = await fetch('https://checkout.cachetechs.com/api/initiatePaymentIntent', {
+    method: 'POST',
+    headers: {
+        'Authorization': 'Basic <%= Buffer.from(app.appId + ':' + app.appSecret).toString('base64') %>',
+        'x-api-key': '<%= app.apiKey %>',
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+        amount: 100.00,
+        currency: 'GHS',
+        paymentMode: 'card',
+        description: 'Test payment',
+        customerEmail: 'customer@example.com',
+        customerName: 'John Doe',
+        orderId: 'ORDER123'
+    })
+});</code></pre>
+    </div>
+</div>

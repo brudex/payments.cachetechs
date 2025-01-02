@@ -1,0 +1,13 @@
+<div>
+    <div class="code-block">
+        <button class="copy-button" data-clipboard-target="#js-status-code">
+            <i class="fas fa-copy"></i>
+        </button>
+        <pre><code class="language-javascript" id="js-status-code">const response = await fetch('https://checkout.cachetechs.com/api/transaction/status/ORDER123', {
+    headers: {
+        'Authorization': 'Basic <%= Buffer.from(app.appId + ':' + app.appSecret).toString('base64') %>',
+        'x-api-key': '<%= app.apiKey %>'
+    }
+});</code></pre>
+    </div>
+</div>

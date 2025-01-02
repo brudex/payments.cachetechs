@@ -1,0 +1,20 @@
+<div>
+    <div class="code-block">
+        <button class="copy-button" data-clipboard-target="#curl-initiate-code">
+            <i class="fas fa-copy"></i>
+        </button>
+        <pre><code class="language-bash" id="curl-initiate-code">curl -X POST https://checkout.cachetechs.com/api/initiatePaymentIntent \
+    -H "Authorization: Basic <%= Buffer.from(app.appId + ':' + app.appSecret).toString('base64') %>" \
+    -H "x-api-key: <%= app.apiKey %>" \
+    -H "Content-Type: application/json" \
+    -d '{
+    "amount": 100.00,
+    "currency": "GHS",
+    "paymentMode": "card",
+    "description": "Test payment",
+    "customerEmail": "customer@example.com",
+    "customerName": "John Doe",
+    "orderId": "ORDER123"
+}'</code></pre>
+    </div>
+</div>

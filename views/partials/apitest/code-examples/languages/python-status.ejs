@@ -1,0 +1,30 @@
+<div>
+    <div class="code-block">
+        <button class="copy-button" data-clipboard-target="#python-status-code">
+            <i class="fas fa-copy"></i>
+        </button>
+        <pre><code class="language-python" id="python-status-code">import requests
+import base64
+
+# API credentials
+app_id = '<%= app.appId %>'
+app_secret = '<%= app.appSecret %>'
+api_key = '<%= app.apiKey %>'
+
+# Create Basic Auth header
+credentials = f"{app_id}:{app_secret}"
+encoded_credentials = base64.b64encode(credentials.encode()).decode()
+
+# Headers
+headers = {
+    'Authorization': f'Basic {encoded_credentials}',
+    'x-api-key': api_key
+}
+
+# Make request
+response = requests.get(
+    'https://checkout.cachetechs.com/api/transaction/status/ORDER123',
+    headers=headers
+)</code></pre>
+    </div>
+</div>

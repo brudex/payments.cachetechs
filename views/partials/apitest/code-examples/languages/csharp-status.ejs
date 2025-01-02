@@ -1,0 +1,35 @@
+ <div class="code-block">
+        <button class="copy-button" data-clipboard-target="#csharp-status-code">
+            <i class="fas fa-copy"></i>
+        </button>
+        <pre><code class="language-csharp" id="csharp-status-code">using System;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
+
+class Program
+{
+    static async Task Main()
+    {
+        var appId = "<%= app.appId %>";
+        var appSecret = "<%= app.appSecret %>";
+        var apiKey = "<%= app.apiKey %>";
+
+        // Create Basic Auth header
+        var credentials = Convert.ToBase64String(
+            Encoding.ASCII.GetBytes($"{appId}:{appSecret}")
+        );
+
+        using var client = new HttpClient();
+        client.DefaultRequestHeaders.Add("Authorization", $"Basic {credentials}");
+        client.DefaultRequestHeaders.Add("x-api-key", apiKey);
+
+        var response = await client.GetAsync(
+            "https://checkout.cachetechs.com/api/transaction/status/ORDER123"
+        );
+
+        var result = await response.Content.ReadAsStringAsync();
+        Console.WriteLine(result);
+    }
+}</code></pre>
+    </div>

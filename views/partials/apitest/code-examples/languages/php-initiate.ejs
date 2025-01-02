@@ -1,0 +1,38 @@
+<div>
+    <div class="code-block">
+        <button class="copy-button" data-clipboard-target="#php-initiate-code">
+            <i class="fas fa-copy"></i>
+        </button>
+        <pre><code class="language-php" id="php-initiate-code"><?php
+$appId = '<%= app.appId %>';
+$appSecret = '<%= app.appSecret %>';
+$apiKey = '<%= app.apiKey %>';
+
+$credentials = base64_encode("$appId:$appSecret");
+
+$headers = [
+    'Authorization: Basic ' . $credentials,
+    'x-api-key: ' . $apiKey,
+    'Content-Type: application/json'
+];
+
+$payload = [
+    'amount' => 100.00,
+    'currency' => 'GHS',
+    'paymentMode' => 'card',
+    'description' => 'Test payment',
+    'customerEmail' => 'customer@example.com',
+    'customerName' => 'John Doe',
+    'orderId' => 'ORDER123'
+];
+
+$ch = curl_init('https://checkout.cachetechs.com/api/initiatePaymentIntent');
+curl_setopt($ch, CURLOPT_POST, 1);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+$response = curl_exec($ch);
+curl_close($ch);</code></pre>
+    </div>
+</div>

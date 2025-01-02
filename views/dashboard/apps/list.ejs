@@ -1,13 +1,14 @@
-<%- contentFor('body') %>
-
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h1 class="page-title">My Applications</h1>
-                <a href="/dashboard/apps/create" class="btn btn-primary">
-                    <i class="fas fa-plus"></i> Create New App
-                </a>
+                <div class="d-flex gap-3">
+                    <input type="text" id="appSearch" class="form-control" placeholder="Search applications...">
+                    <a href="/dashboard/apps/create" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Create New App
+                    </a>
+                </div>
             </div>
 
             <% if (messages.success) { %>
@@ -16,67 +17,37 @@
                 </div>
             <% } %>
 
-            <% if (messages.error) { %>
-                <div class="alert alert-danger" role="alert">
-                    <%= messages.error %>
-                </div>
-            <% } %>
-
             <div class="row">
                 <% if (apps && apps.length > 0) { %>
                     <% apps.forEach(function(app) { %>
                         <div class="col-md-6 col-lg-4 mb-4">
-                            <div class="card h-100">
+                            <div class="card h-100 app-card">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <h5 class="app-name mb-0"><%= app.appName %></h5>
+                                    <span class="badge <%= app.isActive ? 'bg-success' : 'bg-danger' %>">
+                                        <%= app.isActive ? 'Active' : 'Inactive' %>
+                                    </span>
+                                </div>
                                 <div class="card-body">
-                                    <div class="d-flex align-items-center mb-3">
-                                        <% if (app.logoUrl) { %>
-                                            <img src="<%= app.logoUrl %>" alt="<%= app.appName %>" class="me-3" style="width: 40px; height: 40px; object-fit: contain;">
-                                        <% } else { %>
-                                            <div class="me-3">
-                                                <i class="fas fa-cube fa-2x text-primary"></i>
-                                            </div>
-                                        <% } %>
-                                        <h5 class="card-title mb-0"><%= app.appName %></h5>
-                                    </div>
-
                                     <div class="mb-3">
                                         <small class="text-muted">Payment Modes:</small>
-                                        <div class="mt-1">
+                                        <div class="mt-1 d-flex gap-1">
                                             <% app.paymentModes.forEach(function(mode) { %>
-                                                <span class="badge bg-primary me-1"><%= mode %></span>
+                                                <span class="badge bg-primary" data-bs-toggle="tooltip" title="<%= mode === 'card' ? 'Credit/Debit Cards' : mode === 'wallet' ? 'Mobile Money' : 'Cryptocurrency' %>">
+                                                    <%= mode %>
+                                                </span>
                                             <% }); %>
+                                            <i class="fas fa-question-circle ms-2" data-bs-toggle="tooltip" title="These are the payment methods your application can accept"></i>
                                         </div>
                                     </div>
 
-                                    <div class="mb-3">
-                                        <small class="text-muted">App ID:</small>
-                                        <div class="input-group">
-                                            <input type="text" class="form-control form-control-sm" value="<%= app.appId %>" readonly>
-                                            <button class="btn btn-outline-secondary btn-sm copy-btn" type="button" data-clipboard-text="<%= app.appId %>">
-                                                <i class="fas fa-copy"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <small class="text-muted">API Key:</small>
-                                        <div class="input-group">
-                                            <input type="text" class="form-control form-control-sm" value="<%= app.apiKey %>" readonly>
-                                            <button class="btn btn-outline-secondary btn-sm copy-btn" type="button" data-clipboard-text="<%= app.apiKey %>">
-                                                <i class="fas fa-copy"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                    <div class="text-end">
-                                        <button class="btn btn-sm btn-outline-primary me-2">
-                                            <i class="fas fa-cog"></i> Settings
+                                    <div class="d-flex justify-content-between mt-3">
+                                        <button class="btn btn-outline-primary show-credentials-btn" data-app-id="<%= app.uuid %>">
+                                            <i class="fas fa-key"></i> Show Credentials
                                         </button>
-                                        <% if (app.isActive) { %>
-                                            <span class="badge bg-success">Active</span>
-                                        <% } else { %>
-                                            <span class="badge bg-danger">Inactive</span>
-                                        <% } %>
+                                        <a href="/dashboard/apps/<%= app.uuid %>/test" class="btn btn-outline-secondary">
+                                            <i class="fas fa-cog"></i> Test API
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -99,9 +70,57 @@
     </div>
 </div>
 
+<!-- Credentials Modal -->
+<div class="modal fade" id="credentialsModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">API Credentials - <span id="credentialsAppName"></span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">App ID</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="appIdValue" readonly>
+                        <button class="btn btn-outline-secondary copy-btn" data-clipboard-target="#appIdValue">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">API Key</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="apiKeyValue" readonly>
+                        <button class="btn btn-outline-secondary copy-btn" data-clipboard-target="#apiKeyValue">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">App Secret</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="appSecretValue" readonly>
+                        <button class="btn btn-outline-secondary copy-btn" data-clipboard-target="#appSecretValue">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="alert alert-warning mb-0">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Keep your credentials secure. Do not share them with unauthorized users.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" id="regenerateCredentials">
+                    <i class="fas fa-sync"></i> Regenerate Credentials
+                </button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Include ClipboardJS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.8/clipboard.min.js"></script>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    new ClipboardJS('.copy-btn');
-});
-</script>
+<script src="/js/dashboard/app-list.js"></script>

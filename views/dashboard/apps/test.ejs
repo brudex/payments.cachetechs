@@ -1,0 +1,31 @@
+<div class="container-fluid">
+    <%- include('../../partials/dashboard/page-header', { 
+        title: 'Test API Integration',
+        backLink: '/dashboard/apps',
+        backText: 'Back to Apps'
+    }) %>
+
+    <!-- API Info Card -->
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Integration Guide for <%= app.appName %></h4>
+        </div>
+        <div class="card-body">
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle"></i>
+                <strong>Base URL:</strong> https://checkout.cachetechs.com/api
+            </div>
+            
+            <%- include('../../partials/apitest/credentials', { app }) %>
+            <%- include('../../partials/apitest/authentication') %>
+        </div>
+    </div>
+
+    <!-- Initiate Payment -->
+    <%- include('../../partials/apitest/code-examples/initiate-payment', { app }) %>
+
+    <!-- Check Transaction Status -->
+    <%- include('../../partials/apitest/code-examples/check-status', { app }) %>
+</div>
+</boltArtifact>
+ 
