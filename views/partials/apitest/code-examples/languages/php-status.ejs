@@ -1,26 +1,35 @@
-<div>
-llll
-    <div class="code-block">
-        <button class="copy-button" data-clipboard-target="#php-status-code">
+ <div class="code-block">
+        <button class="copy-button" data-clipboard-target="#csharp-status-code">
             <i class="fas fa-copy"></i>
         </button>
-        <pre><code class="language-php" id="php-status-code"><?php
-$appId = '<%= app.appId %>';
-$appSecret = '<%= app.appSecret %>';
-$apiKey = '<%= app.apiKey %>';
+        <pre><code class="language-csharp" id="csharp-status-code">using System;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
 
-$credentials = base64_encode("$appId:$appSecret");
+class Program
+{
+    static async Task Main()
+    {
+        var appId = "<%= app.appId %>";
+        var appSecret = "<%= app.appSecret %>";
+        var apiKey = "<%= app.apiKey %>";
 
-$headers = [
-    'Authorization: Basic ' . $credentials,
-    'x-api-key: ' . $apiKey
-];
+        // Create Basic Auth header
+        var credentials = Convert.ToBase64String(
+            Encoding.ASCII.GetBytes($"{appId}:{appSecret}")
+        );
 
-$ch = curl_init('https://checkout.cachetechs.com/api/transaction/status/ORDER123');
-curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        using var client = new HttpClient();
+        client.DefaultRequestHeaders.Add("Authorization", $"Basic {credentials}");
+        client.DefaultRequestHeaders.Add("x-api-key", apiKey);
 
-$response = curl_exec($ch);
-curl_close($ch);</code></pre>
+        var response = await client.GetAsync(
+            "https://checkout.cachetechs.com/api/transaction/status/ORDER123"
+        );
+
+        var result = await response.Content.ReadAsStringAsync();
+        Console.WriteLine(result);
+    }
+}</code></pre>
     </div>
-</div>
