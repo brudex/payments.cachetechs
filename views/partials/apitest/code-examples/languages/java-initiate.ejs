@@ -21,14 +21,18 @@ public class PaymentExample {
 
         // Payment payload
         String payload = """
-            {
-                "amount": 100.00,
-                "currency": "GHS",
-                "paymentMode": "card",
-                "description": "Test payment",
-                "customerEmail": "customer@example.com",
-                "customerName": "John Doe",
-                "orderId": "ORDER123"
+          {
+                "amount": 2,
+                "orderId": "TRX-OR-090909",
+                "mobileNumber": "+23445454543",
+                "network": "MTN",
+                "callbackUrl": "https://you-domain/your-endpoint-callbck",
+                "details": {
+                    "mobileNumber": "2348087574",
+                    "email": "info@cachetechs.com",
+                    "payeeName": "Cache Technology",
+                    "orderDescription": "Paying for Water"
+                }
             }
         """;
 
