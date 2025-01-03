@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-PROJECT_FOLDER=/var/www/checkoutCache
+PROJECT_FOLDER=/var/www/payments.cachetechs
 cd ${PROJECT_FOLDER}
 echo "Starting Deployment"
 

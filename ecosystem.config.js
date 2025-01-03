@@ -1,17 +1,10 @@
 module.exports = {
     apps : [{
-      name: "Cache-Pay-GateWay",
+      name: "Payments.CacheTechs",
       script: "./bin/www",
       env: {
         NODE_ENV: "production",
-        PORT: 3666,
+        PORT: 3999,
       }
-    },
-    {
-        name: "Cache-Pay-GateWay-Cron",
-        script: "./cronserver.js",
-        env: {
-            NODE_ENV: "production",
-        }
     }]
 };
