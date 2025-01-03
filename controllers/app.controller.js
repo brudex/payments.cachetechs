@@ -5,7 +5,7 @@ const { generateSecureId, generateApiKey } = require('../utils/security');
 const { PAYMENT_MODE_LABELS, DEFAULT_PAYMENT_MODES } = require('../constants/payment');
 
 const controller = {
-    // List all apps
+    // Existing methods
     listApps: async (req, res) => {
         try {
             const apps = await db.UserApp.findAll({
@@ -151,6 +151,69 @@ const controller = {
             logger.error('Error loading test API page:', error);
             req.flash('error', 'Failed to load test API page');
             res.redirect('/dashboard/apps');
+        }
+    },
+
+    // New methods
+    editAppView: async (req, res) => {
+        try {
+            const app = await db.UserApp.findOne({
+                where: { 
+                    uuid: req.params.appId,
+                    userUuid: req.session.user.uuid 
+                }
+            });
+
+            if (!app) {
+                req.flash('error', 'Application not found');
+                return res.redirect('/dashboard/apps');
+            }
+
+            res.render('dashboard/apps/edit', {
+                title: 'Edit Application',
+                layout: 'layouts/dashboard',
+                path: '/dashboard/apps',
+                app,
+                paymentModes: PAYMENT_MODE_LABELS
+            });
+        } catch (error) {
+            logger.error('Error loading edit app page:', error);
+            req.flash('error', 'Failed to load application');
+            res.redirect('/dashboard/apps');
+        }
+    },
+
+    updateApp: async (req, res) => {
+        try {
+            const app = await db.UserApp.findOne({
+                where: { 
+                    uuid: req.params.appId,
+                    userUuid: req.session.user.uuid 
+                }
+            });
+
+            if (!app) {
+                req.flash('error', 'Application not found');
+                return res.redirect('/dashboard/apps');
+            }
+
+            const updates = {
+                paymentModes: Array.isArray(req.body['paymentModes[]']) 
+                    ? req.body['paymentModes[]'] 
+                    : [req.body['paymentModes[]']],
+                shouldSendClientCallback: req.body.shouldSendCallback === 'true',
+                appCallbackUrl: req.body.callbackUrl,
+                isActive: req.body.isActive === 'true'
+            };
+
+            await app.update(updates);
+            
+            req.flash('success', 'Application updated successfully');
+            res.redirect('/dashboard/apps');
+        } catch (error) {
+            logger.error('Error updating app:', error);
+            req.flash('error', 'Failed to update application');
+            res.redirect(`/dashboard/apps/${req.params.appId}/edit`);
         }
     }
 };

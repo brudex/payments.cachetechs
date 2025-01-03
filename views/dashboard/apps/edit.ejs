@@ -1,0 +1,212 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <!-- Header -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h1 class="page-title h3 fw-bold mb-2">Edit Application</h1>
+                    <p class="text-muted">Update settings for <%= app.appName %></p>
+                </div>
+                <a href="/dashboard/apps" class="btn btn-outline-primary">
+                    <i class="fas fa-arrow-left"></i> Back to Apps
+                </a>
+            </div>
+
+            <% if (messages.error) { %>
+                <div class="alert alert-danger" role="alert">
+                    <%= messages.error %>
+                </div>
+            <% } %>
+
+            <div class="card">
+                <div class="card-body">
+                    <form action="/dashboard/apps/<%= app.uuid %>/update" method="POST" id="editAppForm">
+                        <!-- App Status -->
+                        <div class="form-section mb-4">
+                            <h5 class="form-section-title">Application Status</h5>
+                            <hr class="my-3">
+                            
+                            <div class="form-check form-switch">
+                                <input 
+                                    class="form-check-input" 
+                                    type="checkbox" 
+                                    id="isActive"
+                                    name="isActive"
+                                    value="true"
+                                    <%= app.isActive ? 'checked' : '' %>
+                                >
+                                <label class="form-check-label" for="isActive">
+                                    Application Active
+                                </label>
+                            </div>
+                            <small class="text-muted">
+                                Deactivating will prevent new payments from being processed
+                            </small>
+                        </div>
+
+                        <!-- Payment Methods -->
+                        <div class="form-section mb-4">
+                            <h5 class="form-section-title">Payment Methods</h5>
+                            <hr class="my-3">
+                            
+                            <div class="payment-methods-grid">
+                                <% Object.entries(paymentModes).forEach(([key, label]) => { %>
+                                    <div class="payment-method-card">
+                                        <input 
+                                            type="checkbox" 
+                                            class="btn-check" 
+                                            id="mode-<%= key %>"
+                                            value="<%= key %>"
+                                            name="paymentModes[]"
+                                            <%= app.paymentModes.includes(key) ? 'checked' : '' %>
+                                        >
+                                        <label class="payment-method-label" for="mode-<%= key %>">
+                                            <div class="payment-method-icon">
+                                                <i class="fas <%= key === 'card' ? 'fa-credit-card' : key === 'wallet' ? 'fa-wallet' : 'fa-coins' %>"></i>
+                                            </div>
+                                            <h6><%= label %></h6>
+                                        </label>
+                                    </div>
+                                <% }); %>
+                            </div>
+                            <div class="invalid-feedback">Please select at least one payment method</div>
+                        </div>
+
+                        <!-- Callback Settings -->
+                        <div class="form-section mb-4">
+                            <h5 class="form-section-title">
+                                Transaction Notifications
+                                <i class="fas fa-info-circle text-muted" 
+                                   data-bs-toggle="tooltip" 
+                                   title="Receive real-time updates about payment status changes">
+                                </i>
+                            </h5>
+                            <hr class="my-3">
+
+                            <div class="form-check form-switch mb-3">
+                                <input 
+                                    class="form-check-input" 
+                                    type="checkbox" 
+                                    id="shouldSendCallback"
+                                    name="shouldSendCallback"
+                                    value="true"
+                                    <%= app.shouldSendClientCallback ? 'checked' : '' %>
+                                >
+                                <label class="form-check-label" for="shouldSendCallback">
+                                    Enable webhook notifications
+                                </label>
+                            </div>
+                            
+                            <div id="callbackUrlContainer" style="display: <%= app.shouldSendClientCallback ? 'block' : 'none' %>;">
+                                <div class="form-floating mb-3">
+                                    <input 
+                                        type="url" 
+                                        class="form-control" 
+                                        id="callbackUrl" 
+                                        name="callbackUrl"
+                                        value="<%= app.appCallbackUrl %>"
+                                        placeholder="https://your-domain.com/webhook"
+                                    >
+                                    <label for="callbackUrl">Webhook URL</label>
+                                    <div class="invalid-feedback">
+                                        Please enter a valid URL
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                Update Application
+                            </button>
+                            <a href="/dashboard/apps" class="btn btn-outline-secondary">
+                                Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.payment-method-card {
+    position: relative;
+}
+
+.payment-method-label {
+    display: block;
+    padding: 1.5rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.payment-method-label:hover {
+    border-color: #2563eb;
+    background-color: #f8fafc;
+}
+
+.btn-check:checked + .payment-method-label {
+    border-color: #2563eb;
+    background-color: #eff6ff;
+}
+
+.payment-method-icon {
+    font-size: 1.5rem;
+    color: #2563eb;
+    margin-bottom: 0.75rem;
+}
+
+.payment-methods-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.form-section-title {
+    color: #1a1f36;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize tooltips
+    const tooltips = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    tooltips.forEach(tooltip => new bootstrap.Tooltip(tooltip));
+
+    // Handle callback URL toggle
+    const shouldSendCallback = document.getElementById('shouldSendCallback');
+    const callbackUrlContainer = document.getElementById('callbackUrlContainer');
+    const callbackUrl = document.getElementById('callbackUrl');
+
+    shouldSendCallback.addEventListener('change', function() {
+        callbackUrlContainer.style.display = this.checked ? 'block' : 'none';
+        callbackUrl.required = this.checked;
+    });
+
+    // Form validation
+    const form = document.getElementById('editAppForm');
+    form.addEventListener('submit', function(e) {
+        const paymentModes = document.querySelectorAll('input[name="paymentModes[]"]:checked');
+        if (paymentModes.length === 0) {
+            e.preventDefault();
+            alert('Please select at least one payment method');
+            return;
+        }
+
+        if (shouldSendCallback.checked && !callbackUrl.value) {
+            e.preventDefault();
+            alert('Please enter a callback URL');
+            callbackUrl.focus();
+            return;
+        }
+    });
+});
+</script>

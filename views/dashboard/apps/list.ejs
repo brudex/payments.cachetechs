@@ -1,17 +1,12 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
+            <!-- Header section remains the same -->
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h1 class="page-title h3 fw-bold">My Applications</h1>
-                <div class="d-flex gap-3">
-                    <div class="search-wrapper">
-                        <i class="fas fa-search text-muted position-absolute ps-3" style="top: 50%; transform: translateY(-50%);"></i>
-                        <input type="text" id="appSearch" class="form-control ps-5" placeholder="Search applications..." style="min-width: 250px;">
-                    </div>
-                    <a href="/dashboard/apps/create" class="btn btn-primary">
-                        <i class="fas fa-plus"></i> Create New App
-                    </a>
-                </div>
+                <a href="/dashboard/apps/create" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Create New App
+                </a>
             </div>
 
             <% if (messages.success) { %>
@@ -25,60 +20,54 @@
                 <% if (apps && apps.length > 0) { %>
                     <% apps.forEach(function(app) { %>
                         <div class="col-md-6 col-lg-4 mb-4">
-                            <div class="card h-100 app-card border-0 shadow-sm">
-                                <!-- Card Header with Status -->
-                                <div class="card-header bg-white border-bottom-0 pt-4 pb-0 px-4">
-                                    <div class="d-flex justify-content-between align-items-start">
-                                        <div class="app-icon-wrapper me-3">
-                                            <div class="app-icon rounded-circle bg-primary bg-opacity-10 p-3">
-                                                <i class="fas fa-cube fa-lg text-primary"></i>
-                                            </div>
-                                        </div>
-                                        <div class="flex-grow-1">
-                                            <h5 class="app-name mb-2 fw-bold text-dark"><%= app.appName %></h5>
-                                            <div class="status-badge">
-                                                <span class="badge rounded-pill <%= app.isActive ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger' %> px-3 py-2">
-                                                    <i class="fas fa-circle fs-xs me-1"></i>
-                                                    <%= app.isActive ? 'Active' : 'Inactive' %>
-                                                </span>
-                                            </div>
-                                        </div>
+                            <div class="app-card">
+                                <!-- Card Header -->
+                                <div class="app-card-header">
+                                    <div class="app-icon">
+                                        <i class="fas fa-cube"></i>
+                                    </div>
+                                    <div class="app-info">
+                                        <h3 class="app-name"><%= app.appName %></h3>
+                                        <span class="status-badge <%= app.isActive ? 'active' : 'inactive' %>">
+                                            <i class="fas fa-circle"></i>
+                                            <%= app.isActive ? 'Active' : 'Inactive' %>
+                                        </span>
                                     </div>
                                 </div>
 
-                                <!-- Card Body -->
-                                <div class="card-body px-4 pt-3">
-                                    <!-- Payment Modes -->
-                                    <div class="mb-4">
-                                        <label class="text-muted small mb-2 d-block">Payment Methods</label>
-                                        <div class="d-flex gap-2 flex-wrap">
+                                <!-- Card Content -->
+                                <div class="app-card-content">
+                                    <div class="payment-modes">
+                                        <label>Payment Methods</label>
+                                        <div class="mode-badges">
                                             <% app.paymentModes.forEach(function(mode) { %>
-                                                <span class="payment-mode-badge" 
+                                                <span class="mode-badge" 
                                                       data-bs-toggle="tooltip" 
                                                       title="<%= mode === 'card' ? 'Credit/Debit Cards' : mode === 'wallet' ? 'Mobile Money' : 'Cryptocurrency' %>">
-                                                    <i class="fas <%= mode === 'card' ? 'fa-credit-card' : mode === 'wallet' ? 'fa-wallet' : 'fa-coins' %> me-1"></i>
+                                                    <i class="fas <%= mode === 'card' ? 'fa-credit-card' : mode === 'wallet' ? 'fa-wallet' : 'fa-coins' %>"></i>
                                                     <%= mode %>
                                                 </span>
                                             <% }); %>
                                         </div>
                                     </div>
+                                </div>
 
-                                    <!-- Action Buttons -->
-                                    <div class="d-flex gap-2 mt-auto">
-                                        <button class="btn btn-primary flex-grow-1 show-credentials-btn" data-app-id="<%= app.uuid %>">
-                                            <i class="fas fa-key me-2"></i> Show Credentials
-                                        </button>
-                                        <a href="/dashboard/apps/<%= app.uuid %>/test" 
-                                           class="btn btn-light border-primary text-primary flex-grow-1">
-                                            <i class="fas fa-code me-2"></i> Test API
-                                        </a>
-                                    </div>
+                                <!-- Card Actions -->
+                                <div class="app-card-actions">
+                                    <button class="btn btn-outline-primary show-credentials-btn" data-app-id="<%= app.uuid %>">
+                                        <i class="fas fa-key"></i>
+                                        <span>Show Credentials</span>
+                                    </button>
+                                    <a href="/dashboard/apps/<%= app.uuid %>/test" class="btn btn-primary">
+                                        <i class="fas fa-code"></i>
+                                        <span>Test API</span>
+                                    </a>
                                 </div>
                             </div>
                         </div>
                     <% }); %>
                 <% } else { %>
-                    <div class="col-12">
+                   <div class="col-12">
                         <div class="text-center py-5">
                             <div class="empty-state-icon mb-4">
                                 <i class="fas fa-cube fa-3x text-primary opacity-50"></i>
@@ -151,61 +140,196 @@
 </div>
 
 <style>
-/* Card Styles */
+/* Enhanced Card Styles */
 .app-card {
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    background: #ffffff;
     border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    border: 1px solid #e5e9f2;
     overflow: hidden;
 }
 
 .app-card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.12) !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    border-color: #d0d7e6;
+}
+
+/* Card Header */
+.app-card-header {
+    padding: 1.5rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    border-bottom: 1px solid #e5e9f2;
+    background: linear-gradient(to right, #f8f9fc, #ffffff);
 }
 
 .app-icon {
     width: 48px;
     height: 48px;
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
+    color: white;
+    font-size: 1.25rem;
+    flex-shrink: 0;
 }
 
-/* Payment Mode Badges */
-.payment-mode-badge {
+.app-info {
+    flex-grow: 1;
+}
+
+.app-name {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1a1f36;
+    margin-bottom: 0.5rem;
+    line-height: 1.2;
+}
+
+/* Status Badge */
+.status-badge {
     display: inline-flex;
     align-items: center;
-    padding: 6px 12px;
+    padding: 0.25rem 0.75rem;
     border-radius: 20px;
     font-size: 0.875rem;
-    background: var(--bs-primary-bg-subtle);
-    color: var(--bs-primary);
-    border: 1px solid var(--bs-primary-border-subtle);
+    font-weight: 500;
+    gap: 0.375rem;
 }
 
-/* Search Input */
-.search-wrapper {
-    position: relative;
+.status-badge.active {
+    background-color: #dcfce7;
+    color: #15803d;
 }
 
-/* Empty State */
-.empty-state-icon {
-    width: 80px;
-    height: 80px;
-    margin: 0 auto;
+.status-badge.inactive {
+    background-color: #fee2e2;
+    color: #b91c1c;
+}
+
+.status-badge i {
+    font-size: 0.625rem;
+}
+
+/* Card Content */
+.app-card-content {
+    padding: 1.5rem;
+}
+
+ .payment-modes {
+    margin-bottom: 1rem;
+}
+
+.payment-modes label {
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.mode-badges {
+    display: inline-flex;
+    flex-wrap: nowrap;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.mode-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.375rem 0.75rem;
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(30, 64, 175, 0.1) 100%);
+    border: 1px solid rgba(37, 99, 235, 0.2);
+    border-radius: 6px;
+    font-size: 0.875rem;
+    color: #2563eb;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.mode-badge i {
+    font-size: 0.875rem;
+    color: #2563eb;
+}
+
+.mode-badge:hover {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.15) 0%, rgba(30, 64, 175, 0.15) 100%);
+    border-color: rgba(37, 99, 235, 0.3);
+    transform: translateY(-1px);
+}
+
+/* Updated Button Styles to match Create New App */
+.app-card-actions {
+    padding: 1.5rem;
     display: flex;
+    gap: 1rem;
+    border-top: 1px solid #e5e9f2;
+    background-color: #f8f9fc;
+    margin-top: auto;
+}
+
+.app-card-actions .btn {
+    flex: 1;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    background: var(--bs-primary-bg-subtle);
-    border-radius: 50%;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    border-radius: 8px;
 }
 
-/* Utility Classes */
-.fs-xs {
-    font-size: 0.75rem;
+.app-card-actions .btn i {
+    font-size: 0.875rem;
 }
+
+.app-card-actions .btn-outline-primary {
+    border: 1px solid #2563eb;
+    color: #2563eb;
+    background-color: transparent;
+}
+
+.app-card-actions .btn-outline-primary:hover {
+    background-color: #eef2ff;
+    border-color: #1e40af;
+    color: #1e40af;
+    transform: translateY(-1px);
+}
+
+.app-card-actions .btn-primary {
+    background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+    border: none;
+    color: white;
+    box-shadow: 0 2px 4px rgba(37, 99, 235, 0.1);
+}
+
+.app-card-actions .btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+}
+
+/* Ensure consistent card height */
+.app-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 320px;
+}
+
+.app-card-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+                 
 </style>
-
-<!-- Include ClipboardJS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.8/clipboard.min.js"></script>
 <script src="/js/dashboard/app-list.js"></script>

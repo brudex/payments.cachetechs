@@ -1,11 +1,26 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
+            <!-- Header -->
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h1 class="page-title">Create New Application</h1>
+                <div>
+                    <h1 class="page-title h3 fw-bold mb-2">Create New Application</h1>
+                    <p class="text-muted">Set up a new payment integration for your business</p>
+                </div>
                 <a href="/dashboard/apps" class="btn btn-outline-primary">
                     <i class="fas fa-arrow-left"></i> Back to Apps
                 </a>
+            </div>
+
+            <!-- Form Progress -->
+            <div class="form-progress mb-4">
+                <div class="progress" style="height: 4px;">
+                    <div class="progress-bar" role="progressbar" style="width: 0%" id="formProgress"></div>
+                </div>
+                <div class="d-flex justify-content-between mt-2">
+                    <small class="text-muted">Required fields completed: <span id="completedFields">0</span>/3</small>
+                    <small class="text-muted">* Required field</small>
+                </div>
             </div>
 
             <% if (messages.error) { %>
@@ -16,31 +31,83 @@
 
             <div class="card">
                 <div class="card-body">
-                    <form action="/dashboard/apps/create" method="POST" id="createAppForm">
-                        <!-- App Name -->
-                        <div class="mb-3">
-                            <label for="appName" class="form-label">Application Name *</label>
-                            <input 
-                                type="text" 
-                                class="form-control" 
-                                id="appName" 
-                                name="appName" 
-                                required
-                                minlength="3"
-                                maxlength="100"
-                                hx-get="/dashboard/apps/validate-name"
-                                hx-trigger="change"
-                                hx-target="next .invalid-feedback"
-                            >
-                            <div class="invalid-feedback"></div>
+                    <form action="/dashboard/apps/create" method="POST" id="createAppForm" class="needs-validation" novalidate>
+                        <!-- Application Details Section -->
+                        <div class="form-section mb-4">
+                            <h5 class="form-section-title">Application Details</h5>
+                            <hr class="my-3">
+                            
+                            <!-- App Name Field -->
+                            <div class="form-floating mb-3">
+                                <input 
+                                    type="text" 
+                                    class="form-control" 
+                                    id="appName" 
+                                    name="appName" 
+                                    placeholder="My Payment App"
+                                    required
+                                    minlength="3"
+                                    maxlength="100"
+                                    pattern="^[a-zA-Z0-9\s\-_]+$"
+                                    data-bs-toggle="tooltip"
+                                    data-bs-placement="right"
+                                    title="Use letters, numbers, spaces, hyphens, and underscores only"
+                                >
+                                <label for="appName">Application Name *</label>
+                                <div class="invalid-feedback"></div>
+                                <div class="form-text">
+                                    <span id="charCount">0</span>/100 characters
+                                </div>
+                            </div>
                         </div>
 
-                        <!-- Payment Modes -->
-                        <%- include('_payment-modes', { paymentModes, defaultModes }) %>
+                        <!-- Payment Methods Section -->
+                        <div class="form-section mb-4">
+                            <h5 class="form-section-title">Payment Methods</h5>
+                            <hr class="my-3">
+                            
+                            <div class="payment-methods-grid">
+                                <% Object.entries(paymentModes).forEach(([key, label]) => { %>
+                                    <div class="payment-method-card">
+                                        <input 
+                                            type="checkbox" 
+                                            class="btn-check" 
+                                            id="mode-<%= key %>"
+                                            value="<%= key %>"
+                                            name="paymentModes[]"
+                                            <% if (defaultModes.includes(key)) { %>checked<% } %>
+                                        >
+                                        <label class="payment-method-label" for="mode-<%= key %>">
+                                            <div class="payment-method-icon">
+                                                <i class="fas <%= key === 'card' ? 'fa-credit-card' : key === 'wallet' ? 'fa-wallet' : 'fa-coins' %>"></i>
+                                            </div>
+                                            <h6><%= label %></h6>
+                                            <small class="text-muted">
+                                                <%= key === 'card' ? 'Accept credit & debit cards' : 
+                                                    key === 'wallet' ? 'Mobile money payments' : 
+                                                    'Cryptocurrency payments' %>
+                                            </small>
+                                        </label>
+                                    </div>
+                                <% }); %>
+                            </div>
+                            <div class="invalid-feedback payment-methods-feedback">
+                                Please select at least one payment method
+                            </div>
+                        </div>
 
-                        <!-- Callback Settings -->
-                        <div class="mb-3">
-                            <div class="form-check">
+                        <!-- Transaction Notifications Section -->
+                        <div class="form-section mb-4">
+                            <h5 class="form-section-title">
+                                Transaction Notifications
+                                <i class="fas fa-info-circle text-muted" 
+                                   data-bs-toggle="tooltip" 
+                                   title="Receive real-time updates about payment status changes via webhook notifications">
+                                </i>
+                            </h5>
+                            <hr class="my-3">
+
+                            <div class="form-check form-switch mb-3">
                                 <input 
                                     class="form-check-input" 
                                     type="checkbox" 
@@ -49,29 +116,50 @@
                                     value="true"
                                 >
                                 <label class="form-check-label" for="shouldSendCallback">
-                                    Enable Payment Callbacks
+                                    Enable webhook notifications
                                 </label>
                             </div>
                             
-                            <div class="mt-3" id="callbackUrlContainer" style="display: none;">
-                                <label for="callbackUrl" class="form-label">Callback URL *</label>
-                                <input 
-                                    type="url" 
-                                    class="form-control" 
-                                    id="callbackUrl" 
-                                    name="callbackUrl"
-                                    placeholder="https://your-domain.com/webhook"
-                                    pattern="https?://.+"
-                                >
-                                <div class="form-text">
-                                    URL that will receive payment notifications via POST requests. Must start with http:// or https://
+                            <div class="callback-section" id="callbackUrlContainer" style="display: none;">
+                                <div class="form-floating mb-3">
+                                    <input 
+                                        type="url" 
+                                        class="form-control" 
+                                        id="callbackUrl" 
+                                        name="callbackUrl"
+                                        placeholder="https://your-domain.com/webhook"
+                                    >
+                                    <label for="callbackUrl">Webhook URL *</label>
+                                    <div class="invalid-feedback">
+                                        Please enter a valid URL (must start with http:// or https://)
+                                    </div>
+                                </div>
+
+                                <!-- Sample Payload -->
+                                <div class="callback-payload-example">
+                                    <h6>Sample Webhook Payload</h6>
+                                    <pre class="bg-light p-3 rounded"><code>{
+  "event": "payment.completed",
+  "data": {
+    "orderId": "ORD-123456",
+    "amount": 100.00,
+    "currency": "USD",
+    "status": "completed",
+    "paymentMethod": "card",
+    "timestamp": "2024-01-03T12:00:00Z"
+  }
+}</code></pre>
                                 </div>
                             </div>
                         </div>
 
-                        <button type="submit" class="btn btn-primary">
-                            Create Application
-                        </button>
+                        <!-- Submit Button -->
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg" id="submitBtn">
+                                <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                                Create Application
+                            </button>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -79,5 +167,207 @@
     </div>
 </div>
 
-<!-- Include app form JS -->
-<script src="/js/app-form.js"></script>
+<style>
+/* Form Sections */
+.form-section-title {
+    color: #1a1f36;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+/* Progress Bar */
+.form-progress .progress {
+    background-color: #e9ecef;
+    border-radius: 10px;
+}
+
+.form-progress .progress-bar {
+    background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+    border-radius: 10px;
+    transition: width 0.3s ease;
+}
+
+/* Floating Labels */
+.form-floating > label {
+    color: #6b7280;
+}
+
+.form-floating > .form-control:focus ~ label,
+.form-floating > .form-control:not(:placeholder-shown) ~ label {
+    color: #2563eb;
+}
+
+/* Payment Methods Grid */
+.payment-methods-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.payment-method-card {
+    position: relative;
+}
+
+.payment-method-label {
+    display: block;
+    padding: 1.5rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.payment-method-label:hover {
+    border-color: #2563eb;
+    background-color: #f8fafc;
+}
+
+.btn-check:checked + .payment-method-label {
+    border-color: #2563eb;
+    background-color: #eff6ff;
+}
+
+.payment-method-icon {
+    font-size: 1.5rem;
+    color: #2563eb;
+    margin-bottom: 0.75rem;
+}
+
+/* Callback Section */
+.callback-section {
+    background-color: #f8fafc;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-top: 1rem;
+}
+
+.callback-payload-example {
+    margin-top: 1rem;
+}
+
+.callback-payload-example pre {
+    font-size: 0.875rem;
+    margin: 0;
+}
+
+/* Submit Button */
+.btn-primary {
+    background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+    border: none;
+    padding: 0.75rem 1.5rem;
+    font-weight: 500;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
+    transform: translateY(-1px);
+}
+
+/* Form Validation Styles */
+.was-validated .form-control:invalid,
+.form-control.is-invalid {
+    border-color: #dc2626;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc2626'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc2626' stroke='none'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right calc(0.375em + 0.1875rem) center;
+    background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('createAppForm');
+    const appNameInput = document.getElementById('appName');
+    const charCount = document.getElementById('charCount');
+    const progressBar = document.getElementById('formProgress');
+    const completedFields = document.getElementById('completedFields');
+    const submitBtn = document.getElementById('submitBtn');
+    const shouldSendCallback = document.getElementById('shouldSendCallback');
+    const callbackUrlContainer = document.getElementById('callbackUrlContainer');
+    const callbackUrl = document.getElementById('callbackUrl');
+
+    // Initialize tooltips
+    const tooltips = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    tooltips.forEach(tooltip => new bootstrap.Tooltip(tooltip));
+
+    // Character counter
+    appNameInput.addEventListener('input', function() {
+        const length = this.value.length;
+        charCount.textContent = length;
+        
+        // Real-time validation
+        const isValid = /^[a-zA-Z0-9\s\-_]+$/.test(this.value);
+        if (!isValid && this.value) {
+            this.classList.add('is-invalid');
+            this.nextElementSibling.nextElementSibling.textContent = 
+                'Only letters, numbers, spaces, hyphens, and underscores allowed';
+        } else {
+            this.classList.remove('is-invalid');
+        }
+        
+        updateProgress();
+    });
+
+    // Payment methods validation
+    const paymentMethods = document.querySelectorAll('input[name="paymentModes[]"]');
+    paymentMethods.forEach(method => {
+        method.addEventListener('change', updateProgress);
+    });
+
+    // Callback URL toggle
+    shouldSendCallback.addEventListener('change', function() {
+        callbackUrlContainer.style.display = this.checked ? 'block' : 'none';
+        callbackUrl.required = this.checked;
+        updateProgress();
+    });
+
+    // Form validation and submission
+    form.addEventListener('submit', function(e) {
+        if (!form.checkValidity()) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        
+        // Check if at least one payment method is selected
+        const selectedMethods = [...paymentMethods].filter(m => m.checked);
+        if (selectedMethods.length === 0) {
+            e.preventDefault();
+            document.querySelector('.payment-methods-feedback').style.display = 'block';
+            return;
+        }
+
+        // Show loading state
+        submitBtn.disabled = true;
+        submitBtn.querySelector('.spinner-border').classList.remove('d-none');
+    });
+
+    // Update progress bar
+    function updateProgress() {
+        let completed = 0;
+        
+        // App name validation
+        if (appNameInput.value.length >= 3 && /^[a-zA-Z0-9\s\-_]+$/.test(appNameInput.value)) {
+            completed++;
+        }
+        
+        // Payment methods validation
+        if ([...paymentMethods].some(m => m.checked)) {
+            completed++;
+        }
+        
+        // Callback URL validation
+        if (!shouldSendCallback.checked || 
+            (shouldSendCallback.checked && callbackUrl.value && callbackUrl.checkValidity())) {
+            completed++;
+        }
+
+        const progress = (completed / 3) * 100;
+        progressBar.style.width = `${progress}%`;
+        completedFields.textContent = completed;
+    }
+
+    // Initial progress update
+    updateProgress();
+});
+</script>
