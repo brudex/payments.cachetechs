@@ -27,7 +27,18 @@
                                         <i class="fas fa-cube"></i>
                                     </div>
                                     <div class="app-info">
-                                        <h3 class="app-name"><%= app.appName %></h3>
+                                        <div class="d-flex justify-content-between align-items-start">
+                                            <h3 class="app-name"><%= app.appName %></h3>
+                                            <a href="/dashboard/apps/<%= app.uuid %>/edit" 
+                                               class="edit-link"
+                                               data-bs-toggle="tooltip"
+                                               title="Edit Application">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                        </div>
+
+
+
                                         <span class="status-badge <%= app.isActive ? 'active' : 'inactive' %>">
                                             <i class="fas fa-circle"></i>
                                             <%= app.isActive ? 'Active' : 'Inactive' %>
@@ -166,6 +177,37 @@
     background: linear-gradient(to right, #f8f9fc, #ffffff);
 }
 
+/* New styles for title row */
+.app-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 0.5rem;
+}
+
+.app-name {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1a1f36;
+    margin: 0;
+    padding-right: 0.5rem;
+}
+
+.edit-link {
+    color: #6b7280;
+    padding: 0.25rem;
+    border-radius: 0.375rem;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+}
+
+.edit-link:hover {
+    color: #2563eb;
+    background-color: rgba(37, 99, 235, 0.1);
+}
+
 .app-icon {
     width: 48px;
     height: 48px;
@@ -181,6 +223,23 @@
 
 .app-info {
     flex-grow: 1;
+}
+
+.app-info .edit-link {
+    color: #6b7280;
+    padding: 0.25rem;
+    border-radius: 0.375rem;
+    transition: all 0.2s ease;
+    line-height: 1;
+}
+
+.app-info .edit-link:hover {
+    color: #2563eb;
+    background-color: rgba(37, 99, 235, 0.1);
+}
+
+.app-name {
+    margin-right: 0.5rem;
 }
 
 .app-name {
@@ -331,5 +390,6 @@
 }
                  
 </style>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.8/clipboard.min.js"></script>
 <script src="/js/dashboard/app-list.js"></script>
