@@ -1,10 +1,18 @@
 /* API Test Page Styles */
 
+/* Container */
+.container-fluid {
+    max-width: 100%;
+    overflow-x: hidden;
+    padding: 1.5rem;
+}
+
 /* Cards */
 .card {
     border: none;
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     margin-bottom: 1.5rem;
+    overflow: hidden;
 }
 
 .card-header {
@@ -13,10 +21,8 @@
     padding: 1rem 1.25rem;
 }
 
-.card-header .badge {
-    font-family: 'Fira Code', monospace;
-    font-size: 0.85rem;
-    padding: 0.5rem 0.75rem;
+.card-body {
+    padding: 1.5rem;
 }
 
 /* Code blocks */
@@ -26,13 +32,14 @@
     border-radius: 6px;
     margin: 1rem 0;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    overflow: hidden;
 }
 
 .code-block pre {
     margin: 0;
     padding: 1.5rem;
     overflow-x: auto;
-    background: transparent;
+    max-width: 100%;
 }
 
 .code-block code {
@@ -40,18 +47,62 @@
     font-size: 0.9rem;
     background: transparent;
     padding: 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+/* Credentials section */
+.api-credentials {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 1.5rem;
+}
+
+.credential-group {
+    margin-bottom: 0;
+}
+
+.credential-group label {
+    font-weight: 500;
+    color: #6b7280;
+    margin-bottom: 0.5rem;
+}
+
+.input-group {
+    width: 100%;
+    background-color: #fff;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.input-group .form-control {
+    border-right: none;
+    background-color: #fff;
+    font-size: 0.875rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.input-group .btn {
+    border: 1px solid #dee2e6;
+    border-left: none;
+    background-color: #fff;
+    color: #6b7280;
+    padding: 0.375rem 0.75rem;
+    flex-shrink: 0;
 }
 
 /* Copy buttons */
 .copy-button, .copy-btn {
     padding: 0.375rem 0.75rem;
-    background: #3e4451;
-    border: 1px solid #528bff;
-    border-radius: 4px;
-    color: #abb2bf;
+    background: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: 0 4px 4px 0;
+    color: #6b7280;
     font-size: 0.875rem;
     cursor: pointer;
     transition: all 0.2s ease;
+    flex-shrink: 0;
 }
 
 .copy-button {
@@ -59,27 +110,33 @@
     top: 0.75rem;
     right: 0.75rem;
     z-index: 10;
+    background: #3e4451;
+    border-color: #528bff;
+    color: #abb2bf;
 }
 
 .copy-button:hover, .copy-btn:hover {
-    background: #4b5363;
-    border-color: #61afef;
-    color: #fff;
+    background-color: #f8f9fa;
+    color: #2563eb;
 }
 
 .copy-button.copied, .copy-btn.copied {
-    background: #98c379;
+    background-color: #98c379;
     border-color: #98c379;
     color: #fff;
 }
 
-/* Language tabs */
+/* Tab navigation */
 .nav-tabs {
     border-bottom: 1px solid #e9ecef;
     margin-bottom: 1rem;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 .nav-tabs .nav-link {
+    white-space: nowrap;
     border: none;
     border-bottom: 2px solid transparent;
     color: #6c757d;
@@ -102,23 +159,28 @@
 /* Tab content */
 .tab-content {
     position: relative;
+    width: 100%;
 }
 
 .tab-pane {
-    opacity: 0;
-    transition: opacity 0.15s ease-in-out;
+    width: 100%;
 }
 
-.tab-pane.show {
-    opacity: 1;
-}
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .container-fluid {
+        padding: 1rem;
+    }
+    
+    .card-body {
+        padding: 1rem;
+    }
+    
+    .api-credentials {
+        padding: 1rem;
+    }
 
-/* Credentials section */
-.input-group-text {
-    background: none;
-    border-left: none;
-}
-
-.form-control[readonly] {
-    background-color: #f8f9fa;
+    .input-group .form-control {
+        font-size: 0.75rem;
+    }
 }
