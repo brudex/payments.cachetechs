@@ -8,11 +8,11 @@ const config = {
         app: {
             name: "checkout.cachetechs",
         },
-        port: process.env.PORT || 3010,
-        dbhost: process.env.DBHOST || "localhost",
-        db: process.env.DBNAME || "CachePay",
-        dbuser: process.env.DBUSER || "postgres",
-        dbpass: process.env.DBPASS || "pass@1234",
+        port: process.env.PORT,
+        dbhost: process.env.DBHOST,
+        db: process.env.DBNAME,
+        dbuser: process.env.DBUSER,
+        dbpass: process.env.DBPASS,
         siteurl: "http://localhost:3000"
     },
     production: {
@@ -20,11 +20,11 @@ const config = {
         app: {
             name: "checkout.cachetechs",
         },
-        port: process.env.PORT || 3015,
-        dbhost: process.env.DBHOST || "localhost",
-        db: process.env.DBNAME || "CachePay",
-        dbuser: process.env.DBUSER || "postgres",
-        dbpass: process.env.DBPASS || "kejQwtVt7CAiGI5E6zsn8rj0K3QdKuD1",
+        port: process.env.PORT,
+        dbhost: process.env.DBHOST,
+        db: process.env.DBNAME,
+        dbuser: process.env.DBUSER,
+        dbpass: process.env.DBPASS,
         siteurl: "https://checkout.cachetechs.com"
     },
 };
