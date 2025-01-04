@@ -9,7 +9,10 @@ const AppList = {
     setupEventListeners() {
         // Show credentials modal
         document.querySelectorAll('.show-credentials-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => this.showCredentials(e));
+            btn.addEventListener('click', (e) => {
+                const appId = btn.getAttribute('data-app-id');
+                this.showCredentials(e, appId);
+            });
         });
 
         // Regenerate credentials
@@ -45,9 +48,8 @@ const AppList = {
         });
     },
 
-    async showCredentials(e) {
+    async showCredentials(e, appId) {
         const btn = e.target;
-        const appId = btn.dataset.appId;
         
         // Show loading state
         btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
