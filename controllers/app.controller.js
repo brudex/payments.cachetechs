@@ -1,6 +1,6 @@
 const db = require('../models');
 const logger = require('../utils/logger');
-const { validateAppInput } = require('../utils/validation');
+const { validateAppInput, validateUpdateAppInput } = require('../utils/validation');
 const { generateSecureId, generateApiKey } = require('../utils/security');
 const { PAYMENT_MODE_LABELS, DEFAULT_PAYMENT_MODES } = require('../constants/payment');
 
@@ -9,7 +9,8 @@ const controller = {
     listApps: async (req, res) => {
         try {
             const apps = await db.UserApp.findAll({
-                where: { userUuid: req.session.user.uuid }
+                where: { userUuid: req.session.user.uuid },
+                order: [['id', 'ASC']]
             });
             
             res.render('dashboard/apps/list', {
@@ -54,6 +55,9 @@ const controller = {
             };
 
             logger.info('Processed payload:', { payload });
+            if(payload.shouldSendCallback==false){
+                delete payload.callbackUrl;
+            }
 
             const { error } = validateAppInput(payload);
             if (error) {
@@ -201,13 +205,26 @@ const controller = {
                 paymentModes: Array.isArray(req.body['paymentModes[]']) 
                     ? req.body['paymentModes[]'] 
                     : [req.body['paymentModes[]']],
-                shouldSendClientCallback: req.body.shouldSendCallback === 'true',
-                appCallbackUrl: req.body.callbackUrl,
+                    shouldSendCallback: req.body.shouldSendCallback === 'true',
+                    callbackUrl: req.body.callbackUrl,
                 isActive: req.body.isActive === 'true'
             };
+            if(updates.shouldSendCallback==false){
+                delete updates.callbackUrl;
+            }
+            // Validate incoming data using the new validation function
+            const { error } = validateUpdateAppInput(updates);
 
-            await app.update(updates);
+            if (error) {
+                logger.error('Validation failed:', {
+                    error: error.details[0],
+                    payload: req.body
+                });
+                req.flash('error', error.details[0].message);
+                return res.redirect(`/dashboard/apps/${req.params.appId}/edit`);
+            }
             
+            await app.update(updates);        
             req.flash('success', 'Application updated successfully');
             res.redirect('/dashboard/apps');
         } catch (error) {

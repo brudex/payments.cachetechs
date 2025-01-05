@@ -360,6 +360,8 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!shouldSendCallback.checked || 
             (shouldSendCallback.checked && callbackUrl.value && callbackUrl.checkValidity())) {
             completed++;
+        } else {
+            callbackUrl.required = false;
         }
 
         const progress = (completed / 3) * 100;

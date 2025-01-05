@@ -1,60 +1,96 @@
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
-            <h1 class="page-title">Dashboard Overview</h1>
-            
-            <div class="row g-4">
-                <!-- Total Transactions -->
-                <div class="col-md-4">
-                    <div class="stats-card">
-                        <div class="stats-icon">
-                            <i class="fas fa-chart-line"></i>
-                        </div>
-                        <div class="stats-info">
-                            <h3>Total Transactions</h3>
-                            <p class="stats-number">0</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Total Revenue -->
-                <div class="col-md-4">
-                    <div class="stats-card">
-                        <div class="stats-icon">
-                            <i class="fas fa-money-bill-wave"></i>
-                        </div>
-                        <div class="stats-info">
-                            <h3>Total Revenue</h3>
-                            <p class="stats-number">$0.00</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Active Apps -->
-                <div class="col-md-4">
-                    <div class="stats-card">
-                        <div class="stats-icon">
-                            <i class="fas fa-cube"></i>
-                        </div>
-                        <div class="stats-info">
-                            <h3>Active Apps</h3>
-                            <p class="stats-number">0</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <!-- Header -->
+    <div class="dashboard-header mb-4">
+        <h1 class="page-title">Dashboard Overview</h1>
+    </div>
 
-            <!-- Recent Transactions -->
-            <div class="row mt-4">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Recent Transactions</h5>
-                            <p class="text-muted">No transactions found</p>
-                        </div>
-                    </div>
+    <!-- Metrics Grid -->
+    <div class="dashboard-grid">
+        <!-- Total Transactions -->
+        <div class="metric-card">
+            <div class="metric-header">
+                <span class="metric-title">Total Transactions</span>
+                <div class="metric-icon">
+                    <i class="fas fa-chart-bar"></i>
                 </div>
             </div>
+            <div class="metric-value-container">
+                <div class="metric-value" id="totalTransactions">50</div>
+                <div class="metric-trend">
+                    <i class="fas fa-arrow-up trend-up"></i>
+                    <span>12%</span>
+                </div>
+            </div>
+            <div class="metric-chart">
+                <canvas id="transactionsChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Total Revenue -->
+        <div class="metric-card">
+            <div class="metric-header">
+                <span class="metric-title">Total Revenue</span>
+                <div class="metric-icon">
+                    <i class="fas fa-dollar-sign"></i>
+                </div>
+            </div>
+            <div class="metric-value-container">
+                <div class="metric-value" id="totalRevenue">$220</div>
+                <div class="metric-trend">
+                    <i class="fas fa-arrow-up trend-up"></i>
+                    <span>8.5%</span>
+                </div>
+            </div>
+            <div class="metric-chart">
+                <canvas id="revenueChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Active Apps -->
+        <div class="metric-card">
+            <div class="metric-header">
+                <span class="metric-title">Active Apps</span>
+                <div class="metric-icon">
+                    <i class="fas fa-cube"></i>
+                </div>
+            </div>
+            <div class="metric-value-container">
+                <div class="metric-value" id="activeApps">220</div>
+                <div class="metric-trend">
+                    <i class="fas fa-minus"></i>
+                    <span>0%</span>
+                </div>
+            </div>
+            <div class="metric-chart">
+                <canvas id="appsChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Transactions -->
+    <div class="transactions-card">
+        <div class="transactions-header">
+            <h2 class="transactions-title">Recent Transactions</h2>
+            <a href="/dashboard/transactions" class="view-all-btn">
+                View All
+                <i class="fas fa-arrow-right ms-1"></i>
+            </a>
+        </div>
+        <div class="table-responsive">
+            <table class="transactions-table">
+                <thead>
+                    <tr>
+                        <th>Transaction ID</th>
+                        <th>Amount</th>
+                        <th>Payment Mode</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody id="transactionsTableBody">
+                    <!-- Transactions will be loaded dynamically -->
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

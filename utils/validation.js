@@ -56,6 +56,35 @@ const validation = {
         }
 
         return result;
+    },
+
+    validateUpdateAppInput: (data) => {
+        logger.info('Validating update app input:', { data });
+
+        const schema = Joi.object({
+            paymentModes: Joi.array().items(
+                Joi.string().valid(...Object.values(PAYMENT_MODES))
+            ).min(1).required(),
+            shouldSendCallback: Joi.boolean().required(),
+            callbackUrl: Joi.string().uri().when('shouldSendCallback', {
+                is: true,
+                then: Joi.required(),
+                otherwise: Joi.optional()
+            }),
+            isActive: Joi.boolean().required()
+        });
+
+        const result = schema.validate(data);
+        
+        if (result.error) {
+            logger.error('Update app validation failed:', {
+                error: result.error.details,
+                invalidValue: result.error.details[0].context.value,
+                path: result.error.details[0].path
+            });
+        }
+
+        return result;
     }
 };
 

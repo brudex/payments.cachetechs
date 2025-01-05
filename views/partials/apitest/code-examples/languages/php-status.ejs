@@ -25,7 +25,7 @@ class Program
         client.DefaultRequestHeaders.Add("x-api-key", apiKey);
 
         var response = await client.GetAsync(
-            "https://checkout.cachetechs.com/api/transaction/status/ORDER123"
+            "https://checkout.cachetechs.com/api/transaction/status/trx-234343"
         );
 
         var result = await response.Content.ReadAsStringAsync();
