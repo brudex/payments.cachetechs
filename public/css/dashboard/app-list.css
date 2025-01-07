@@ -1,0 +1,239 @@
+
+    /* Enhanced Card Styles */
+.app-card {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    border: 1px solid #e5e9f2;
+    overflow: hidden;
+}
+
+.app-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    border-color: #d0d7e6;
+}
+
+/* Card Header */
+.app-card-header {
+    padding: 1.5rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    border-bottom: 1px solid #e5e9f2;
+    background: linear-gradient(to right, #f8f9fc, #ffffff);
+}
+
+/* New styles for title row */
+.app-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 0.5rem;
+}
+
+.app-name {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1a1f36;
+    margin: 0;
+    padding-right: 0.5rem;
+}
+
+.edit-link {
+    color: #6b7280;
+    padding: 0.25rem;
+    border-radius: 0.375rem;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+}
+
+.edit-link:hover {
+    color: #2563eb;
+    background-color: rgba(37, 99, 235, 0.1);
+}
+
+.app-icon {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.25rem;
+    flex-shrink: 0;
+}
+
+.app-info {
+    flex-grow: 1;
+}
+
+.app-info .edit-link {
+    color: #6b7280;
+    padding: 0.25rem;
+    border-radius: 0.375rem;
+    transition: all 0.2s ease;
+    line-height: 1;
+}
+
+.app-info .edit-link:hover {
+    color: #2563eb;
+    background-color: rgba(37, 99, 235, 0.1);
+}
+
+.app-name {
+    margin-right: 0.5rem;
+}
+
+.app-name {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1a1f36;
+    margin-bottom: 0.5rem;
+    line-height: 1.2;
+}
+
+/* Status Badge */
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    gap: 0.375rem;
+}
+
+.status-badge.active {
+    background-color: #dcfce7;
+    color: #15803d;
+}
+
+.status-badge.inactive {
+    background-color: #fee2e2;
+    color: #b91c1c;
+}
+
+.status-badge i {
+    font-size: 0.625rem;
+}
+
+/* Card Content */
+.app-card-content {
+    padding: 1.5rem;
+}
+
+.payment-modes {
+    margin-bottom: 1rem;
+}
+
+.payment-modes label {
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.mode-badges {
+    display: inline-flex;
+    flex-wrap: nowrap;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.mode-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.375rem 0.75rem;
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(30, 64, 175, 0.1) 100%);
+    border: 1px solid rgba(37, 99, 235, 0.2);
+    border-radius: 6px;
+    font-size: 0.875rem;
+    color: #2563eb;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.mode-badge i {
+    font-size: 0.875rem;
+    color: #2563eb;
+}
+
+.mode-badge:hover {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.15) 0%, rgba(30, 64, 175, 0.15) 100%);
+    border-color: rgba(37, 99, 235, 0.3);
+    transform: translateY(-1px);
+}
+
+/* Updated Button Styles to match Create New App */
+.app-card-actions {
+    padding: 1.5rem;
+    display: flex;
+    gap: 1rem;
+    border-top: 1px solid #e5e9f2;
+    background-color: #f8f9fc;
+    margin-top: auto;
+}
+
+.app-card-actions .btn {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    border-radius: 8px;
+}
+
+.app-card-actions .btn i {
+    font-size: 0.875rem;
+}
+
+.app-card-actions .btn-outline-primary {
+    border: 1px solid #2563eb;
+    color: #2563eb;
+    background-color: transparent;
+}
+
+.app-card-actions .btn-outline-primary:hover {
+    background-color: #eef2ff;
+    border-color: #1e40af;
+    color: #1e40af;
+    transform: translateY(-1px);
+}
+
+.app-card-actions .btn-primary {
+    background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+    border: none;
+    color: white;
+    box-shadow: 0 2px 4px rgba(37, 99, 235, 0.1);
+}
+
+.app-card-actions .btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+}
+
+/* Ensure consistent card height */
+.app-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 320px;
+}
+
+.app-card-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+

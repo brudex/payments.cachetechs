@@ -1,18 +1,22 @@
 <div class="topbar">
-    <button class="sidebar-toggle">
+    <button class="btn sidebar-toggle" type="button" aria-label="Toggle Sidebar">
         <i class="fas fa-bars"></i>
     </button>
     
     <div class="topbar-right">
         <div class="dropdown">
-            <button class="btn dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown">
-                <i class="fas fa-user-circle"></i>
+            <button class="btn dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fas fa-user-circle me-2"></i>
                 <%= user.fullName %>
             </button>
-            <ul class="dropdown-menu dropdown-menu-end">
-                <li><a class="dropdown-item" href="/dashboard/profile">Profile</a></li>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                <li><a class="dropdown-item" href="/dashboard/profile">
+                    <i class="fas fa-user me-2"></i> Profile
+                </a></li>
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="/auth/logout">Logout</a></li>
+                <li><a class="dropdown-item" href="/auth/logout">
+                    <i class="fas fa-sign-out-alt me-2"></i> Logout
+                </a></li>
             </ul>
         </div>
     </div>

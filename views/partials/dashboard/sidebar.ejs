@@ -3,33 +3,36 @@
         <img src="/images/logo.png" alt="Cache Payments" class="logo">
         <h5>Cache Payments</h5>
     </div>
-    
+
     <nav class="sidebar-nav">
         <ul>
-            <li class="<%= path === '/dashboard' ? 'active' : '' %>">
-                <a href="/dashboard">
+            <li class="nav-item <%= path === '/dashboard' ? 'active' : '' %>">
+                <a href="/dashboard" class="nav-link" data-title="Overview">
                     <i class="fas fa-home"></i>
                     <span>Overview</span>
                 </a>
             </li>
-            <li class="<%= path === '/dashboard/transactions' ? 'active' : '' %>">
-                <a href="/dashboard/transactions">
+
+            <li class="nav-item <%= path === '/dashboard/transactions' ? 'active' : '' %>">
+                <a href="/dashboard/transactions" class="nav-link" data-title="Transactions">
                     <i class="fas fa-exchange-alt"></i>
                     <span>Transactions</span>
                 </a>
             </li>
-            <li class="<%= path === '/dashboard/apps' ? 'active' : '' %>">
-                <a href="/dashboard/apps">
+
+            <li class="nav-item <%= path === '/dashboard/apps' ? 'active' : '' %>">
+                <a href="/dashboard/apps" class="nav-link" data-title="Applications">
                     <i class="fas fa-cube"></i>
                     <span>Applications</span>
                 </a>
             </li>
-            <li class="<%= path === '/dashboard/settings' ? 'active' : '' %>">
-                <a href="/dashboard/settings">
-                    <i class="fas fa-cog"></i>
-                    <span>Settings</span>
-                </a>
-            </li>
+
+<!--            <li class="nav-item <%= path === '/dashboard/settings' ? 'active' : '' %>">-->
+<!--                <a href="/dashboard/settings" class="nav-link" data-title="Settings">-->
+<!--                    <i class="fas fa-cog"></i>-->
+<!--                    <span>Settings</span>-->
+<!--                </a>-->
+<!--            </li>-->
         </ul>
     </nav>
 </div>

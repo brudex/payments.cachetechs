@@ -5,6 +5,7 @@ const appController = require('../controllers/app.controller');
 const apiAppController = require('../controllers/api/app.controller');
 const transactionController = require('../controllers/transaction.controller');
 const settingController = require('../controllers/setting.controller');
+const profileController = require('../controllers/profile.controller');
 
 // Dashboard home
 router.get('/', isAuthenticated, (req, res) => {
@@ -26,12 +27,16 @@ router.post('/apps/:appId/update', isAuthenticated, appController.updateApp);
 // App credentials API
 router.get('/apps/:appId/credentials', isAuthenticated, apiAppController.getCredentials);
 router.post('/apps/:appId/regenerate-credentials', isAuthenticated, apiAppController.regenerateCredentials);
-
 // Transactions routes
 router.get('/transactions', isAuthenticated, transactionController.listTransactions);
 
 // Settings routes
 router.get('/settings', isAuthenticated, settingController.showSettings);
 
+// Profile routes
+router.get('/profile', isAuthenticated, profileController.showProfile);
+router.post('/profile/update', isAuthenticated, profileController.updateProfile);
+router.get('/profile/password', isAuthenticated, profileController.showChangePassword);
+router.post('/profile/password', isAuthenticated, profileController.changePassword);
 
 module.exports = router;

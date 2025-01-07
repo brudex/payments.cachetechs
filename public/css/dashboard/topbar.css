@@ -1,0 +1,77 @@
+/* Topbar Styles */
+.topbar {
+    height: 60px;
+    background: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1.5rem;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+}
+
+/* Sidebar Toggle Button */
+.sidebar-toggle {
+    padding: 0.5rem;
+    color: #64748b;
+    border: none;
+    background: transparent;
+    border-radius: 0.375rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.sidebar-toggle:hover {
+    color: #2563eb;
+    background-color: #f1f5f9;
+}
+
+/* User Dropdown */
+.topbar-right .dropdown-toggle {
+    padding: 0.5rem 1rem;
+    color: #64748b;
+    border: none;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.topbar-right .dropdown-toggle:hover {
+    color: #2563eb;
+}
+
+.topbar-right .dropdown-menu {
+    margin-top: 0.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+}
+
+.topbar-right .dropdown-item {
+    padding: 0.5rem 1rem;
+    color: #64748b;
+    display: flex;
+    align-items: center;
+}
+
+.topbar-right .dropdown-item:hover {
+    background-color: #f1f5f9;
+    color: #2563eb;
+}
+
+.topbar-right .dropdown-divider {
+    margin: 0.5rem 0;
+    border-color: #e5e7eb;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .sidebar-toggle {
+        display: flex;
+    }
+}

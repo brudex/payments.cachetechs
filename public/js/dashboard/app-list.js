@@ -1,9 +1,17 @@
+ 
 // App list functionality
 const AppList = {
     init() {
         this.setupEventListeners();
         this.setupSearch();
         this.setupClipboard();
+    },
+
+    setupClipboard() {
+        // ClipboardUtils.init('.copy-btn', 
+        //     (e) => ClipboardUtils.showFeedback(e.trigger, true),
+        //     (e) => ClipboardUtils.showFeedback(e.trigger, false)
+        // );
     },
 
     setupEventListeners() {
@@ -46,6 +54,10 @@ const AppList = {
                 btn.innerHTML = originalText;
             }, 2000);
         });
+        // ClipboardUtils.init('.copy-btn', 
+        //     (e) => ClipboardUtils.showFeedback(e.trigger, true),
+        //     (e) => ClipboardUtils.showFeedback(e.trigger, false)
+        // );
     },
 
     async showCredentials(e, appId) {
