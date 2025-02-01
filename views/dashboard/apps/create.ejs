@@ -36,14 +36,14 @@
                         <div class="form-section mb-4">
                             <h5 class="form-section-title">Application Details</h5>
                             <hr class="my-3">
-                            
+
                             <!-- App Name Field -->
                             <div class="form-floating mb-3">
-                                <input 
-                                    type="text" 
-                                    class="form-control" 
-                                    id="appName" 
-                                    name="appName" 
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    id="appName"
+                                    name="appName"
                                     placeholder="My Payment App"
                                     required
                                     minlength="3"
@@ -65,13 +65,13 @@
                         <div class="form-section mb-4">
                             <h5 class="form-section-title">Payment Methods</h5>
                             <hr class="my-3">
-                            
+
                             <div class="payment-methods-grid">
                                 <% Object.entries(paymentModes).forEach(([key, label]) => { %>
                                     <div class="payment-method-card">
-                                        <input 
-                                            type="checkbox" 
-                                            class="btn-check" 
+                                        <input
+                                            type="checkbox"
+                                            class="btn-check"
                                             id="mode-<%= key %>"
                                             value="<%= key %>"
                                             name="paymentModes[]"
@@ -83,8 +83,8 @@
                                             </div>
                                             <h6><%= label %></h6>
                                             <small class="text-muted">
-                                                <%= key === 'card' ? 'Accept credit & debit cards' : 
-                                                    key === 'wallet' ? 'Mobile money payments' : 
+                                                <%= key === 'card' ? 'Accept credit & debit cards' :
+                                                    key === 'wallet' ? 'Mobile money payments' :
                                                     'Cryptocurrency payments' %>
                                             </small>
                                         </label>
@@ -100,17 +100,17 @@
                         <div class="form-section mb-4">
                             <h5 class="form-section-title">
                                 Transaction Notifications
-                                <i class="fas fa-info-circle text-muted" 
-                                   data-bs-toggle="tooltip" 
+                                <i class="fas fa-info-circle text-muted"
+                                   data-bs-toggle="tooltip"
                                    title="Receive real-time updates about payment status changes via webhook notifications">
                                 </i>
                             </h5>
                             <hr class="my-3">
 
                             <div class="form-check form-switch mb-3">
-                                <input 
-                                    class="form-check-input" 
-                                    type="checkbox" 
+                                <input
+                                    class="form-check-input"
+                                    type="checkbox"
                                     id="shouldSendCallback"
                                     name="shouldSendCallback"
                                     value="true"
@@ -119,13 +119,13 @@
                                     Enable webhook notifications
                                 </label>
                             </div>
-                            
+
                             <div class="callback-section" id="callbackUrlContainer" style="display: none;">
                                 <div class="form-floating mb-3">
-                                    <input 
-                                        type="url" 
-                                        class="form-control" 
-                                        id="callbackUrl" 
+                                    <input
+                                        type="url"
+                                        class="form-control"
+                                        id="callbackUrl"
                                         name="callbackUrl"
                                         placeholder="https://your-domain.com/webhook"
                                     >
@@ -139,15 +139,13 @@
                                 <div class="callback-payload-example">
                                     <h6>Sample Webhook Payload</h6>
                                     <pre class="bg-light p-3 rounded"><code>{
-  "event": "payment.completed",
-  "data": {
-    "orderId": "ORD-123456",
-    "amount": 100.00,
-    "currency": "USD",
-    "status": "completed",
-    "paymentMethod": "card",
-    "timestamp": "2024-01-03T12:00:00Z"
-  }
+  "appId": "123456789",
+  "transactionId": "TX987654321",
+  "orderId": "ORD456789123",
+  "amount": 150.75,
+  "mobileNumber": "+233501234567",
+  "paymentStatus": "COMPLETED" //COMPLETED, FAILED, CANCELLED
+}
 }</code></pre>
                                 </div>
                             </div>
@@ -295,17 +293,17 @@ document.addEventListener('DOMContentLoaded', function() {
     appNameInput.addEventListener('input', function() {
         const length = this.value.length;
         charCount.textContent = length;
-        
+
         // Real-time validation
         const isValid = /^[a-zA-Z0-9\s\-_]+$/.test(this.value);
         if (!isValid && this.value) {
             this.classList.add('is-invalid');
-            this.nextElementSibling.nextElementSibling.textContent = 
+            this.nextElementSibling.nextElementSibling.textContent =
                 'Only letters, numbers, spaces, hyphens, and underscores allowed';
         } else {
             this.classList.remove('is-invalid');
         }
-        
+
         updateProgress();
     });
 
@@ -328,7 +326,7 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
             e.stopPropagation();
         }
-        
+
         // Check if at least one payment method is selected
         const selectedMethods = [...paymentMethods].filter(m => m.checked);
         if (selectedMethods.length === 0) {
@@ -345,19 +343,19 @@ document.addEventListener('DOMContentLoaded', function() {
     // Update progress bar
     function updateProgress() {
         let completed = 0;
-        
+
         // App name validation
         if (appNameInput.value.length >= 3 && /^[a-zA-Z0-9\s\-_]+$/.test(appNameInput.value)) {
             completed++;
         }
-        
+
         // Payment methods validation
         if ([...paymentMethods].some(m => m.checked)) {
             completed++;
         }
-        
+
         // Callback URL validation
-        if (!shouldSendCallback.checked || 
+        if (!shouldSendCallback.checked ||
             (shouldSendCallback.checked && callbackUrl.value && callbackUrl.checkValidity())) {
             completed++;
         } else {

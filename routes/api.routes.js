@@ -1,7 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const transactionRoutes = require('./transaction.routes');
+const {isAuthenticated} = require("../middlewares/auth.middleware");
+const transactionController = require("../controllers/transaction.controller");
 
-router.use('/transactions', transactionRoutes);
 
+router.get('/transactions', isAuthenticated, transactionController.getTransactions);
+// Single transaction details
+router.get('/transactions/:id', isAuthenticated, transactionController.getTransactionDetails);
+// Export transactions
+router.get('/transactions/export/:format', isAuthenticated, transactionController.exportTransactions);
 module.exports = router;

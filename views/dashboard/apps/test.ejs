@@ -1,7 +1,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
 <link rel="stylesheet" href="/css/api-test.css">
 <div class="container-fluid">
-    <%- include('../../partials/dashboard/page-header', { 
+    <%- include('../../partials/dashboard/page-header', {
         title: 'Test API Integration',
         backLink: '/dashboard/apps',
         backText: 'Back to Apps'
@@ -17,18 +17,17 @@
                 <i class="fas fa-info-circle"></i>
                 <strong>Base URL:</strong> https://checkout.cachetechs.com/api
             </div>
-            
             <%- include('../../partials/apitest/credentials', { app }) %>
             <%- include('../../partials/apitest/authentication') %>
         </div>
     </div>
 
        <!-- Initiate Payment -->
-       <%- include('../../partials/apitest/code-examples/initiate-payment', { app }) %>
+       <%- include('../../partials/apitest/initiate-payment', { app }) %>
 
        <!-- Check Transaction Status -->
-       <%- include('../../partials/apitest/code-examples/check-status', { app }) %>
- 
+       <%- include('../../partials/apitest/check-status', { app }) %>
+
 </div>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">

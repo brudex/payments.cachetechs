@@ -11,7 +11,7 @@ const initializeDatabase = async () => {
       dialect: 'postgres',
       logging: false,
       pool: {
-        max: 5,
+        max: 1,
         min: 0,
         acquire: 30000,
         idle: 10000
@@ -21,7 +21,7 @@ const initializeDatabase = async () => {
     // Test connection
     await sequelize.authenticate();
     console.log('Database connection established successfully.');
-    
+
     return sequelize;
   } catch (error) {
     console.error('Unable to connect to the database:', error.message);

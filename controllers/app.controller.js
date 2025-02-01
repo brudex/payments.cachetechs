@@ -12,7 +12,7 @@ const controller = {
                 where: { userUuid: req.session.user.uuid },
                 order: [['id', 'ASC']]
             });
-            
+
             res.render('dashboard/apps/list', {
                 title: 'My Applications',
                 layout: 'layouts/dashboard',
@@ -47,8 +47,8 @@ const controller = {
 
             const payload = {
                 appName: req.body.appName,
-                paymentModes: Array.isArray(req.body['paymentModes[]']) 
-                    ? req.body['paymentModes[]'] 
+                paymentModes: Array.isArray(req.body['paymentModes[]'])
+                    ? req.body['paymentModes[]']
                     : [req.body['paymentModes[]']],
                 shouldSendCallback: req.body.shouldSendCallback === 'true',
                 callbackUrl: req.body.callbackUrl
@@ -82,17 +82,17 @@ const controller = {
                 isActive: true
             };
 
-            logger.info('Creating app with data:', { 
+            logger.info('Creating app with data:', {
                 ...appData,
                 apiKey: '***hidden***',
                 appSecret: '***hidden***'
             });
 
             await db.UserApp.create(appData);
-            
-            logger.info('App created successfully:', { 
+
+            logger.info('App created successfully:', {
                 appId: appData.appId,
-                uuid: appData.uuid 
+                uuid: appData.uuid
             });
 
             req.flash('success', 'Application created successfully');
@@ -113,7 +113,7 @@ const controller = {
         try {
             const { name } = req.query;
             const existingApp = await db.UserApp.findOne({
-                where: { 
+                where: {
                     userUuid: req.session.user.uuid,
                     appName: name
                 }
@@ -134,9 +134,9 @@ const controller = {
     testApi: async (req, res) => {
         try {
             const app = await db.UserApp.findOne({
-                where: { 
+                where: {
                     uuid: req.params.appId,
-                    userUuid: req.session.user.uuid 
+                    userUuid: req.session.user.uuid
                 }
             });
 
@@ -162,9 +162,9 @@ const controller = {
     editAppView: async (req, res) => {
         try {
             const app = await db.UserApp.findOne({
-                where: { 
+                where: {
                     uuid: req.params.appId,
-                    userUuid: req.session.user.uuid 
+                    userUuid: req.session.user.uuid
                 }
             });
 
@@ -190,9 +190,9 @@ const controller = {
     updateApp: async (req, res) => {
         try {
             const app = await db.UserApp.findOne({
-                where: { 
+                where: {
                     uuid: req.params.appId,
-                    userUuid: req.session.user.uuid 
+                    userUuid: req.session.user.uuid
                 }
             });
 
@@ -202,8 +202,8 @@ const controller = {
             }
 
             const updates = {
-                paymentModes: Array.isArray(req.body['paymentModes[]']) 
-                    ? req.body['paymentModes[]'] 
+                paymentModes: Array.isArray(req.body['paymentModes[]'])
+                    ? req.body['paymentModes[]']
                     : [req.body['paymentModes[]']],
                     shouldSendCallback: req.body.shouldSendCallback === 'true',
                     callbackUrl: req.body.callbackUrl,
@@ -223,14 +223,83 @@ const controller = {
                 req.flash('error', error.details[0].message);
                 return res.redirect(`/dashboard/apps/${req.params.appId}/edit`);
             }
-            
-            await app.update(updates);        
+
+            await app.update(updates);
             req.flash('success', 'Application updated successfully');
             res.redirect('/dashboard/apps');
         } catch (error) {
             logger.error('Error updating app:', error);
             req.flash('error', 'Failed to update application');
             res.redirect(`/dashboard/apps/${req.params.appId}/edit`);
+        }
+    },
+
+    // Get app credentials
+    getCredentials: async (req, res) => {
+        try {
+            const { appId } = req.params;
+            const app = await db.UserApp.findOne({
+                where: {
+                    uuid: appId,
+                    userUuid: req.session.user.uuid
+                }
+            });
+
+            if (!app) {
+                return res.status(404).json({
+                    error: 'Application not found'
+                });
+            }
+
+            res.json({
+                appName: app.appName,
+                appId: app.appId,
+                apiKey: app.apiKey,
+                appSecret: app.appSecret
+            });
+        } catch (error) {
+            logger.error('Error fetching app credentials:', error);
+            res.status(500).json({
+                error: 'Failed to fetch credentials'
+            });
+        }
+    },
+
+    // Regenerate app credentials
+    regenerateCredentials: async (req, res) => {
+        try {
+            const { appId } = req.params;
+            const app = await db.UserApp.findOne({
+                where: {
+                    uuid: appId,
+                    userUuid: req.session.user.uuid
+                }
+            });
+
+            if (!app) {
+                return res.status(404).json({
+                    error: 'Application not found'
+                });
+            }
+            // Generate new credentials
+            const newApiKey = generateApiKey();
+            const newAppSecret = generateApiKey();
+
+            // Update app
+            await app.update({
+                apiKey: newApiKey,
+                appSecret: newAppSecret
+            });
+
+            res.json({
+                apiKey: newApiKey,
+                appSecret: newAppSecret
+            });
+        } catch (error) {
+            logger.error('Error regenerating app credentials:', error);
+            res.status(500).json({
+                error: 'Failed to regenerate credentials'
+            });
         }
     }
 };
